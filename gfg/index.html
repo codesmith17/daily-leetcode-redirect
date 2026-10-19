@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Count Indices That Escape Array — GeeksforGeeks POTD (Problem of the Day)</title>
+  <title>Count Indices That Escape Array — GeeksforGeeks POTD</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -90,6 +90,9 @@
       border-radius: 4px;
       border: 1px solid var(--border);
       transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
     .nav-switch:hover {
       background: var(--surface-hover);
@@ -264,12 +267,15 @@
         <span class="dot green"></span>
       </div>
       <div class="path">gfg-potd %</div>
-      <a href="index.html" class="nav-switch">⚡ LeetCode POTD &rarr;</a>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <span id="badge-status" class="pill verified">live check</span>
+        <a href="index.html" class="nav-switch">⚡ LeetCode &rarr;</a>
+      </div>
     </div>
 
     <div class="line">
       <span class="prompt">$</span>
-      <span>fetch --gfg --potd --tz local</span>
+      <span>fetch --potd gfg --tz local</span>
     </div>
 
     <div class="problem-container">
@@ -309,7 +315,7 @@
 
     <div class="footer">
       <span>Auto-redirects based on browser time</span>
-      <span>Last sync: 2026-10-19 05:32 UTC</span>
+      <span>Last sync: 2026-10-19 05:39 UTC</span>
     </div>
   </main>
 
@@ -317,12 +323,15 @@
     (function() {
       // Bundled fallback data generated during build
       const bundled = {
+        platform: "gfg",
+        id: "2210",
         title: "Count Indices That Escape Array",
+        slug: "1",
         difficulty: "Medium",
         difficultyClass: "medium",
         url: "https://www.geeksforgeeks.org/problems/good-stones--170647/1",
         date: "2026-10-19",
-        syncedAt: "2026-10-19 05:32 UTC"
+        syncedAt: "2026-10-19 05:39 UTC"
       };
 
       let targetUrl = bundled.url || "https://www.geeksforgeeks.org/problem-of-the-day";
@@ -339,10 +348,11 @@
       const openLinkEl = document.getElementById("open-link");
       const pauseBtn = document.getElementById("pause-btn");
       const progressBar = document.getElementById("progress-bar");
+      const badgeStatus = document.getElementById("badge-status");
       const localTimeEl = document.getElementById("local-time-display");
       const resetCountdownEl = document.getElementById("reset-countdown");
 
-      // Display user local time & countdown to 00:00 IST
+      // Display user local time & countdown to 00:00 IST (Indian Standard Time)
       function updateClock() {
         const now = new Date();
         try {
@@ -357,12 +367,10 @@
         }
 
         // GFG resets at midnight Indian Standard Time (UTC+5:30)
-        // 00:00:00 IST is equivalent to 18:30:00 UTC of previous day
         const nowUtcMs = now.getTime();
         const istOffsetMs = 5.5 * 60 * 60 * 1000;
         const istTime = new Date(nowUtcMs + istOffsetMs);
 
-        // Next midnight IST
         const nextIstMidnight = new Date(Date.UTC(
           istTime.getUTCFullYear(),
           istTime.getUTCMonth(),
@@ -379,7 +387,7 @@
       updateClock();
       setInterval(updateClock, 1000);
 
-      function setProblem(data) {
+      function setProblem(data, sourceLabel) {
         if (!data || !data.url) return;
         targetUrl = data.url;
         titleEl.textContent = data.title || "";
@@ -393,6 +401,7 @@
           dateEl.textContent = data.date.slice(0, 10);
         }
         openLinkEl.href = targetUrl;
+        if (sourceLabel) badgeStatus.textContent = sourceLabel;
       }
 
       function startRedirect() {
@@ -425,17 +434,17 @@
         }
       });
 
-      // Fetch fresh repo data with cache bust
+      // Fetch fresh repo data with cache-bust
       fetch("data/gfg.json?t=" + Date.now(), { cache: "no-store" })
         .then(res => res.json())
         .then(jsonData => {
           if (jsonData && jsonData.url) {
-            setProblem(jsonData);
+            setProblem(jsonData, "✓ synced repo");
           }
           startRedirect();
         })
         .catch(() => {
-          setProblem(bundled);
+          setProblem(bundled, "offline cache");
           startRedirect();
         });
     })();

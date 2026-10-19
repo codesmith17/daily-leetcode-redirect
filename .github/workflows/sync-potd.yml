@@ -1,4 +1,4 @@
-name: Sync Daily LeetCode & GFG Redirect
+name: Sync Daily POTD (LeetCode & GeeksforGeeks)
 
 on:
   schedule:
@@ -19,7 +19,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: sync-daily-redirect
+  group: sync-daily-potd
   cancel-in-progress: false
 
 jobs:
@@ -34,17 +34,17 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Fetch challenges and rebuild pages
-        run: python scripts/sync-daily-challenge.py
+      - name: Sync POTD challenges & regenerate pages
+        run: python scripts/sync-potd.py
 
       - name: Commit and push if files changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html gfg.html gfg/index.html data/daily.json data/gfg.json
+          git add index.html leetcode.html leetcode/index.html gfg.html gfg/index.html data/leetcode.json data/gfg.json data/daily.json
           if git diff --cached --quiet; then
             echo "Already up to date, nothing to commit."
           else
-            git commit -m "chore: sync daily challenges ($(date -u +%F))"
+            git commit -m "chore: sync daily POTD challenges ($(date -u +%F))"
             git push
           fi

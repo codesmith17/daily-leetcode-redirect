@@ -1,9 +1,16 @@
 {
-  "date": "2026-10-19",
-  "frontendId": "2089",
+  "platform": "leetcode",
+  "id": "2089",
   "title": "Find Target Indices After Sorting Array",
-  "titleSlug": "find-target-indices-after-sorting-array",
+  "slug": "find-target-indices-after-sorting-array",
   "difficulty": "Easy",
+  "difficultyClass": "easy",
   "url": "https://leetcode.com/problems/find-target-indices-after-sorting-array/",
-  "syncedAt": "2026-10-19 05:32 UTC"
+  "date": "2026-10-19",
+  "tags": [
+    "Array",
+    "Binary Search",
+    "Sorting"
+  ],
+  "syncedAt": "2026-10-19 05:39 UTC"
 }

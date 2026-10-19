@@ -1,15 +1,17 @@
 {
-  "date": "2026-10-19 00:00:00",
-  "id": 2210,
-  "problemId": 713990,
+  "platform": "gfg",
+  "id": "2210",
   "title": "Count Indices That Escape Array",
-  "url": "https://www.geeksforgeeks.org/problems/good-stones--170647/1",
+  "slug": "1",
   "difficulty": "Medium",
+  "difficultyClass": "medium",
+  "url": "https://www.geeksforgeeks.org/problems/good-stones--170647/1",
+  "date": "2026-10-19",
   "tags": [
     "Greedy",
     "Dynamic Programming",
     "Graph",
     "DFS"
   ],
-  "syncedAt": "2026-10-19 05:32 UTC"
+  "syncedAt": "2026-10-19 05:39 UTC"
 }

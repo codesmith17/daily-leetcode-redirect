@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>__FRONTEND_ID__. __TITLE__ — LeetCode Daily Challenge</title>
+  <title>__ID__. __TITLE__ — LeetCode POTD</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -15,7 +15,6 @@
       --surface: #161b22;
       --surface-hover: #1f242c;
       --border: #30363d;
-      --border-accent: #388bfd33;
       --text: #e6edf3;
       --muted: #8b949e;
       --accent: #f0883e;
@@ -38,7 +37,7 @@
     }
     .card {
       width: 100%;
-      max-width: 520px;
+      max-width: 530px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -82,6 +81,22 @@
       color: var(--muted);
     }
     .path::before { content: "~/"; }
+    .nav-switch {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-switch:hover {
+      background: var(--surface-hover);
+      border-color: var(--accent);
+    }
     .line {
       display: flex;
       align-items: baseline;
@@ -132,6 +147,13 @@
     .pill.medium { color: var(--medium); background: rgba(210, 153, 34, 0.1); }
     .pill.hard { color: var(--hard); background: rgba(248, 81, 73, 0.1); }
     .pill.verified { color: var(--info); border-color: var(--info); background: rgba(88, 166, 255, 0.1); }
+    .pill.tag {
+      color: var(--muted);
+      border-color: var(--border);
+      font-size: 10px;
+      text-transform: none;
+      font-weight: normal;
+    }
     .time-info {
       font-size: 11px;
       color: var(--muted);
@@ -211,22 +233,6 @@
       animation: blink 1s steps(1) infinite;
     }
     @keyframes blink { 50% { opacity: 0; } }
-    .nav-switch {
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-      transition: all 0.15s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .nav-switch:hover {
-      background: var(--surface-hover);
-      border-color: var(--accent);
-    }
     .footer {
       margin-top: 18px;
       padding-top: 12px;
@@ -268,14 +274,15 @@
 
     <div class="line">
       <span class="prompt">$</span>
-      <span>fetch --potd --tz local</span>
+      <span>fetch --potd leetcode --tz local</span>
     </div>
 
     <div class="problem-container">
-      <div class="problem-title" id="problem-title">__FRONTEND_ID__. __TITLE__</div>
-      <div class="meta-row">
+      <div class="problem-title" id="problem-title">__ID__. __TITLE__</div>
+      <div class="meta-row" id="tags-row">
         <span id="problem-difficulty" class="pill __DIFFICULTY_CLASS__">__DIFFICULTY__</span>
         <span id="problem-date" class="status">__DATE__</span>
+        __TAGS_HTML__
       </div>
 
       <div class="time-info">
@@ -284,7 +291,7 @@
           <span class="time-value" id="local-time-display">--</span>
         </div>
         <div class="time-item">
-          <span class="time-label">Next POTD Reset (00:00 UTC):</span>
+          <span class="time-label">Next LeetCode Reset (00:00 UTC):</span>
           <span class="time-value" id="reset-countdown">--</span>
         </div>
       </div>
@@ -301,7 +308,7 @@
     </div>
 
     <div class="action-row">
-      <a class="btn btn-primary" id="open-link" href="__URL__">Open Problem &rarr;</a>
+      <a class="btn btn-primary" id="open-link" href="__URL__">Open LeetCode &rarr;</a>
       <button class="btn btn-secondary" id="pause-btn">Pause</button>
     </div>
 
@@ -315,7 +322,8 @@
     (function() {
       // Bundled fallback data generated during build
       const bundled = {
-        id: "__FRONTEND_ID__",
+        platform: "leetcode",
+        id: "__ID__",
         title: "__TITLE__",
         slug: "__SLUG__",
         difficulty: "__DIFFICULTY__",
@@ -327,7 +335,6 @@
 
       let targetUrl = bundled.url || "https://leetcode.com/problemset/all/";
       let isPaused = false;
-      let redirectTimeout = null;
       let progressInterval = null;
       const REDIRECT_DURATION = 1400; // ms to let user see problem and allow pause
       let startTime = null;
@@ -376,12 +383,12 @@
       setInterval(updateClock, 1000);
 
       function setProblem(data, sourceLabel) {
-        if (!data || !data.slug) return;
+        if (!data || (!data.slug && !data.url)) return;
         targetUrl = data.url || `https://leetcode.com/problems/${data.slug}/`;
-        const id = data.id || data.frontendId || "";
-        const title = data.title || data.questionTitle || "";
+        const id = data.id || "";
+        const title = data.title || "";
         titleEl.textContent = id ? `${id}. ${title}` : title;
-        document.title = `${id ? id + ". " : ""}${title} — LeetCode Daily`;
+        document.title = `${id ? id + ". " : ""}${title} — LeetCode POTD`;
 
         const diff = (data.difficulty || "Medium").toUpperCase();
         const diffClass = diff.toLowerCase();
@@ -389,10 +396,10 @@
         diffEl.className = `pill ${diffClass}`;
 
         if (data.date) {
-          dateEl.textContent = data.date;
+          dateEl.textContent = data.date.slice(0, 10);
         }
         openLinkEl.href = targetUrl;
-        badgeStatus.textContent = sourceLabel;
+        if (sourceLabel) badgeStatus.textContent = sourceLabel;
       }
 
       function startRedirect() {
@@ -427,37 +434,35 @@
 
       // Verification logic:
       // LeetCode's active POTD switches at 00:00 UTC.
-      // Compare bundled date with current UTC date:
       const todayUtc = new Date().toISOString().slice(0, 10);
       const isBundledStale = bundled.date !== todayUtc;
 
       if (isBundledStale) {
-        badgeStatus.textContent = "checking live...";
+        badgeStatus.textContent = "syncing live...";
         badgeStatus.className = "pill medium";
-        statusEl.textContent = "Syncing fresh POTD...";
+        statusEl.textContent = "Fetching fresh POTD...";
       } else {
         badgeStatus.textContent = "verified today";
         badgeStatus.className = "pill easy";
       }
 
-      // Fetch live data with timeout to guarantee we never redirect to stale problem
-      const liveControllers = new AbortController();
-      const timeoutId = setTimeout(() => liveControllers.abort(), 2500);
+      const liveController = new AbortController();
+      const timeoutId = setTimeout(() => liveController.abort(), 2500);
 
-      // We attempt alfa-leetcode-api first, then local daily.json with cache bust
+      // Attempt live mirror API first
       fetch("https://alfa-leetcode-api.onrender.com/daily", {
-        signal: liveControllers.signal,
+        signal: liveController.signal,
         cache: "no-store"
       })
       .then(res => {
-        if (!res.ok) throw new Error("API returned " + res.status);
+        if (!res.ok) throw new Error("API status " + res.status);
         return res.json();
       })
       .then(data => {
         clearTimeout(timeoutId);
         if (data && data.titleSlug) {
           setProblem({
-            id: data.questionFrontendId || data.questionId,
+            id: String(data.questionFrontendId || data.questionId || ""),
             title: data.questionTitle,
             slug: data.titleSlug,
             difficulty: data.difficulty,
@@ -468,17 +473,16 @@
         startRedirect();
       })
       .catch(() => {
-        // Fallback: check repository daily.json with cache-bust
-        return fetch("data/daily.json?t=" + Date.now(), { cache: "no-store" })
+        // Fallback: check repository data/leetcode.json with cache-bust
+        return fetch("data/leetcode.json?t=" + Date.now(), { cache: "no-store" })
           .then(res => res.json())
           .then(jsonData => {
-            if (jsonData && jsonData.titleSlug) {
+            if (jsonData && jsonData.url) {
               setProblem(jsonData, "✓ synced repo");
             }
             startRedirect();
           })
           .catch(() => {
-            // Ultimate fallback: bundled static data
             setProblem(bundled, "offline cache");
             startRedirect();
           });
@@ -487,4 +491,3 @@
   </script>
 </body>
 </html>
-
