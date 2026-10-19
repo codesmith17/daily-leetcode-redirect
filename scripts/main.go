@@ -83,13 +83,6 @@ func newHTTPClient() *http.Client {
 	}
 }
 
-func copyFileIfExists(src, dst string) {
-	data, err := os.ReadFile(src)
-	if err == nil {
-		_ = os.WriteFile(dst, data, 0644)
-	}
-}
-
 // ----------------- ENTRYPOINT -----------------
 
 func main() {
@@ -99,9 +92,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Navigate to repo root if run from inside cmd/sync
-	if filepath.Base(rootDir) == "sync" {
-		rootDir = filepath.Dir(filepath.Dir(rootDir))
+	// Navigate to repo root if run from inside scripts/
+	if filepath.Base(rootDir) == "scripts" {
+		rootDir = filepath.Dir(rootDir)
 	}
 
 	nowUTC := time.Now().UTC()
@@ -119,22 +112,6 @@ func main() {
 	_, errGFG := syncGFG(client, rootDir, syncedAt)
 	if errGFG != nil {
 		fmt.Fprintf(os.Stderr, "[GFG Error]: %v\n", errGFG)
-	}
-
-	// 3. Mirror data to all subdirectories so relative paths (/leetcode, /leetocde, /gfg) never 404
-	subdirs := []string{
-		filepath.Join(rootDir, "leetcode"),
-		filepath.Join(rootDir, "leetocde"),
-		filepath.Join(rootDir, "gfg"),
-	}
-
-	dataDir := filepath.Join(rootDir, "data")
-	for _, sub := range subdirs {
-		targetDataDir := filepath.Join(sub, "data")
-		_ = os.MkdirAll(targetDataDir, 0755)
-		copyFileIfExists(filepath.Join(dataDir, "leetcode.json"), filepath.Join(targetDataDir, "leetcode.json"))
-		copyFileIfExists(filepath.Join(dataDir, "daily.json"), filepath.Join(targetDataDir, "daily.json"))
-		copyFileIfExists(filepath.Join(dataDir, "gfg.json"), filepath.Join(targetDataDir, "gfg.json"))
 	}
 
 	fmt.Println("\n✓ Golang sync completed successfully.")

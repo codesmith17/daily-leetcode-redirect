@@ -445,7 +445,7 @@
       };
 
       // Dynamic subpath resolution
-      const isSubdir = window.location.pathname.includes('/leetcode') || window.location.pathname.includes('/gfg') || window.location.pathname.includes('/leetocde');
+      const isSubdir = window.location.pathname.includes('/leetcode') || window.location.pathname.includes('/gfg');
       const basePath = isSubdir ? "../data/" : "data/";
 
       const navSwitchBtn = document.getElementById("nav-switch-btn");

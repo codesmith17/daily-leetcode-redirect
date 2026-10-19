@@ -12,7 +12,7 @@ Lightning-fast, timezone-aware terminal redirect pages for both **LeetCode Probl
 | **GeeksforGeeks POTD** | 👉 **[https://codesmith17.github.io/daily-potd-redirect/gfg](https://codesmith17.github.io/daily-potd-redirect/gfg)** | `00:00 IST` (18:30 UTC) |
 
 Clean subpaths are also available:
-- LeetCode: `/leetcode` or `/leetocde` (alias) or root `/`
+- LeetCode: `/leetcode` or root `/`
 - GeeksforGeeks: `/gfg` or `/gfg.html`
 
 Bookmark either link in your browser to immediately jump into today's problem!
@@ -45,19 +45,19 @@ The `data/` directory and HTML pages are synced automatically:
 
 ---
 
-## 📁 2-File Golang Architecture
+## 📁 Modular Golang Automation Architecture
 
-The automation engine is written in standard library **Go (Golang)** across **2 clean files** with zero external dependencies:
+The sync engine is built using standard library **Go (Golang)** with dedicated modules for each platform and zero external dependencies:
 
 ```
 daily-potd-redirect/
 ├── .github/
 │   └── workflows/
 │       └── sync-potd.yml               # Multi-schedule sync workflow with Go 1.23
-├── cmd/
-│   └── sync/
-│       ├── main.go                     # Entrypoint, topic SVG icon registry, data mirrorer
-│       └── sync.go                     # LeetCode (GraphQL/mirror) & GFG (Practice API) synchronizer
+├── scripts/
+│   ├── main.go                         # Entrypoint, topic SVG icon registry & CLI runner
+│   ├── leetcode.go                     # LeetCode GraphQL & community mirror fetcher + compiler
+│   └── gfg.go                          # GeeksforGeeks Practice API fetcher + compiler
 ├── go.mod                              # Go module definition (stdlib only)
 ├── data/
 │   ├── leetcode.json                   # Standardized LeetCode POTD JSON
@@ -67,14 +67,10 @@ daily-potd-redirect/
 │   ├── leetcode.html                   # LeetCode terminal template with SVG icons & difficulty glow
 │   └── gfg.html                        # GeeksforGeeks terminal template with SVG icons & difficulty glow
 ├── leetcode/
-│   └── index.html                      # /leetcode path
-├── leetocde/
-│   └── index.html                      # /leetocde path
+│   └── index.html                      # Clean /leetcode path
 ├── gfg/
-│   └── index.html                      # /gfg path
+│   └── index.html                      # Clean /gfg path
 ├── index.html                          # Root redirect (LeetCode POTD)
-├── leetcode.html                       # Direct HTML page
-├── gfg.html                            # Direct HTML page
 ├── .gitignore
 └── README.md
 ```
