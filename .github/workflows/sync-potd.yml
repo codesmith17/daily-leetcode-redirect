@@ -1,4 +1,4 @@
-name: Sync Daily POTD (LeetCode & GeeksforGeeks)
+name: Sync Daily POTD (LeetCode, GFG & takeUforward)
 
 on:
   schedule:
