@@ -2,15 +2,23 @@ name: Sync Daily POTD (LeetCode, GFG & takeUforward)
 
 on:
   schedule:
-    # 18:30 UTC = 00:00 IST (GeeksforGeeks POTD reset)
-    - cron: "30 18 * * *"
+    # 18:30 UTC = 00:00 IST (GeeksforGeeks & takeUforward POTD reset)
+    # Staggered offsets to prevent GitHub Actions cron queue delays
+    - cron: "31 18 * * *"
+    - cron: "35 18 * * *"
+    - cron: "40 18 * * *"
     - cron: "45 18 * * *"
+    - cron: "55 18 * * *"
+    - cron: "5 19 * * *"
     # 00:00 UTC = 05:30 IST (LeetCode POTD reset)
-    - cron: "0 0 * * *"
+    # Staggered offsets around 05:30 AM IST
+    - cron: "1 0 * * *"
+    - cron: "5 0 * * *"
     - cron: "15 0 * * *"
     - cron: "30 0 * * *"
-    # Hourly fallback sync
-    - cron: "0 * * * *"
+    - cron: "45 0 * * *"
+    # Off-peak hourly sync (minute 23 avoids the :00 and :30 congestion)
+    - cron: "23 * * * *"
   workflow_dispatch: {}
   push:
     branches: [main]

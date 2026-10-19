@@ -529,7 +529,7 @@
     </div>
 
     <footer class="footer">
-      <span>Synced: 2026-10-19 18:13 UTC</span>
+      <span>Synced: 2026-10-19 19:20 UTC</span>
       <div class="kbd-hint">
         <kbd>Space</kbd> open &nbsp;•&nbsp; <kbd>C</kbd> pause
       </div>
@@ -548,7 +548,7 @@
         url: "https://leetcode.com/problems/find-target-indices-after-sorting-array/",
         date: "2026-10-19",
         tags: ["Array","Binary Search","Sorting"],
-        syncedAt: "2026-10-19 18:13 UTC"
+        syncedAt: "2026-10-19 19:20 UTC"
       };
 
       // Platform Configuration Dictionary
@@ -559,7 +559,9 @@
           resetHours: 0,
           resetMins: 0,
           resetLabel: "00:00 UTC (05:30 AM IST)",
-          emoji: "⚡"
+          emoji: "⚡",
+          defaultPOTDUrl: "https://leetcode.com/problem-list/daily-question/",
+          timeZone: "UTC"
         },
         gfg: {
           name: "GeeksforGeeks",
@@ -567,7 +569,9 @@
           resetHours: 18,
           resetMins: 30,
           resetLabel: "12:00 AM IST (18:30 UTC)",
-          emoji: "🌿"
+          emoji: "🌿",
+          defaultPOTDUrl: "https://www.geeksforgeeks.org/problem-of-the-day",
+          timeZone: "Asia/Kolkata"
         },
         tuf: {
           name: "takeUforward",
@@ -575,22 +579,58 @@
           resetHours: 18,
           resetMins: 30,
           resetLabel: "12:00 AM IST (18:30 UTC)",
-          emoji: "🎯"
+          emoji: "🎯",
+          defaultPOTDUrl: "https://takeuforward.org/potd",
+          timeZone: "Asia/Kolkata"
         }
       };
 
       const pConfig = PLATFORMS[BUNDLED_POTD.platform] || PLATFORMS.leetcode;
+
+      // Check whether challenge date is expired based on platform reset timezone
+      function isChallengeExpired(challengeDate, timeZone) {
+        if (!challengeDate || challengeDate.length < 10) return false;
+        try {
+          const today = new Intl.DateTimeFormat('en-CA', {
+            timeZone: timeZone || 'UTC',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+          }).format(new Date());
+          return challengeDate.slice(0, 10) < today;
+        } catch (e) {
+          const todayUtc = new Date().toISOString().slice(0, 10);
+          return challengeDate.slice(0, 10) < todayUtc;
+        }
+      }
+
+      const isBundledExpired = isChallengeExpired(BUNDLED_POTD.date, pConfig.timeZone);
+
+      // If bundled POTD is expired, immediately point target to live POTD portal so user is never redirected to yesterday's link
+      let targetUrl = isBundledExpired ? pConfig.defaultPOTDUrl : BUNDLED_POTD.url;
 
       // Update dynamic DOM elements
       const favicon = document.getElementById("favicon");
       if (favicon && pConfig.emoji) {
         favicon.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${pConfig.emoji}</text></svg>`;
       }
-      document.title = `${BUNDLED_POTD.title} — ${pConfig.name} POTD`;
+      
+      const titleEl = document.getElementById("problem-title");
       const btnCta = document.getElementById("btn-cta-text");
-      if (btnCta) btnCta.textContent = pConfig.cta;
       const redirectLabel = document.getElementById("redirect-label");
-      if (redirectLabel) redirectLabel.textContent = `Redirecting to ${pConfig.name}`;
+      const redirectBtn = document.getElementById("btn-redirect");
+
+      if (isBundledExpired) {
+        document.title = `Today's ${pConfig.name} POTD`;
+        if (titleEl) titleEl.textContent = `Today's Challenge (Refreshing...)`;
+        if (btnCta) btnCta.textContent = "Open Live POTD";
+        if (redirectLabel) redirectLabel.textContent = `Opening Live ${pConfig.name} POTD`;
+        if (redirectBtn) redirectBtn.href = pConfig.defaultPOTDUrl;
+      } else {
+        document.title = `${BUNDLED_POTD.title} — ${pConfig.name} POTD`;
+        if (btnCta) btnCta.textContent = pConfig.cta;
+        if (redirectLabel) redirectLabel.textContent = `Redirecting to ${pConfig.name}`;
+      }
 
       // Dynamic subpath resolution
       const isSubdir = window.location.pathname.includes('/tuf') || window.location.pathname.includes('/leetcode') || window.location.pathname.includes('/gfg');
@@ -604,9 +644,7 @@
       if (navGfgBtn) navGfgBtn.href = isSubdir ? "../gfg" : "./gfg";
       if (navTufBtn) navTufBtn.href = isSubdir ? "../tuf" : "./tuf";
 
-      let targetUrl = BUNDLED_POTD.url;
       let autoRedirectCancelled = false;
-      const redirectBtn = document.getElementById("btn-redirect");
       const cancelBtn = document.getElementById("btn-cancel");
       const countdownEl = document.getElementById("countdown-text");
       const progressBar = document.getElementById("progress-bar");
@@ -638,21 +676,116 @@
       updateResetCountdown();
       setInterval(updateResetCountdown, 30000);
 
+      function applyPOTDData(data) {
+        if (!data || !data.url) return;
+        targetUrl = data.url;
+        if (redirectBtn) redirectBtn.href = data.url;
+        if (titleEl && data.title) titleEl.textContent = data.title;
+        const diffPill = document.getElementById("pill-difficulty");
+        if (diffPill && data.difficulty) {
+          diffPill.textContent = data.difficulty;
+          diffPill.className = "pill pill-difficulty " + (data.difficultyClass || data.difficulty.toLowerCase());
+        }
+        if (redirectLabel) redirectLabel.textContent = `Redirecting to ${pConfig.name}`;
+        if (btnCta) btnCta.textContent = pConfig.cta;
+        document.title = `${data.title} — ${pConfig.name} POTD`;
+      }
+
+      // Try calling live platform API directly with a quick timeout
+      async function tryDirectAPIFetch() {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1800);
+
+        try {
+          if (BUNDLED_POTD.platform === "gfg") {
+            const resp = await fetch("https://practiceapi.geeksforgeeks.org/api/vr/problems-of-day/problem/today/", {
+              signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            if (resp.ok) {
+              const json = await resp.json();
+              if (json && json.problem_url) {
+                applyPOTDData({
+                  title: json.problem_name || "Today's GeeksforGeeks POTD",
+                  url: json.problem_url,
+                  difficulty: json.difficulty || "Medium",
+                  difficultyClass: (json.difficulty || "medium").toLowerCase(),
+                  id: json.id ? String(json.id) : ""
+                });
+                return;
+              }
+            }
+          } else if (BUNDLED_POTD.platform === "tuf") {
+            const resp = await fetch("https://backend-go.takeuforward.org/api/v1/potd/today?track=dsa", {
+              signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            if (resp.ok) {
+              const json = await resp.json();
+              const track = json && json.data && json.data.tracks && json.data.tracks[0];
+              if (track && track.problem && track.problem.slug) {
+                applyPOTDData({
+                  title: track.problem.name || "Today's takeUforward POTD",
+                  url: "https://takeuforward.org/practice/dsa/" + track.problem.slug,
+                  difficulty: track.problem.difficulty || "Core",
+                  difficultyClass: "medium",
+                  id: "#" + track.problem.problem_id
+                });
+                return;
+              }
+            }
+          } else if (BUNDLED_POTD.platform === "leetcode") {
+            const resp = await fetch("https://leetcode.com/graphql", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                query: "query { activeDailyCodingChallengeQuestion { date link question { title difficulty } } }"
+              }),
+              signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            if (resp.ok) {
+              const json = await resp.json();
+              const q = json && json.data && json.data.activeDailyCodingChallengeQuestion;
+              if (q && q.link) {
+                applyPOTDData({
+                  title: (q.question && q.question.title) || "Today's LeetCode POTD",
+                  url: "https://leetcode.com" + q.link,
+                  difficulty: (q.question && q.question.difficulty) || "Medium",
+                  difficultyClass: ((q.question && q.question.difficulty) || "medium").toLowerCase(),
+                  id: ""
+                });
+                return;
+              }
+            }
+          }
+        } catch (e) {
+          clearTimeout(timeoutId);
+          // If direct fetch fails (e.g. CORS), targetUrl safely remains pConfig.defaultPOTDUrl
+        }
+      }
+
       // Verify bundled challenge against live data/<platform>.json with cache-busting
       async function verifyLivePOTD() {
         try {
-          const resp = await fetch(basePath + BUNDLED_POTD.platform + ".json?t=" + Date.now());
+          const resp = await fetch(basePath + BUNDLED_POTD.platform + ".json?t=" + Date.now(), { cache: "no-store" });
           if (resp.ok) {
             const data = await resp.json();
             if (data && data.url) {
-              targetUrl = data.url;
-              if (redirectBtn) redirectBtn.href = data.url;
-              const titleEl = document.getElementById("problem-title");
-              if (titleEl && data.title) titleEl.textContent = data.title;
+              const dataExpired = isChallengeExpired(data.date, pConfig.timeZone);
+              if (!dataExpired) {
+                applyPOTDData(data);
+                return;
+              }
             }
           }
         } catch (e) {
           console.warn("Could not fetch live " + BUNDLED_POTD.platform + ".json", e);
+        }
+
+        // If stored data is expired, try calling the direct API
+        if (isBundledExpired) {
+          await tryDirectAPIFetch();
         }
       }
       verifyLivePOTD();

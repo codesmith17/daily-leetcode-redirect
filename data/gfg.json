@@ -1,17 +1,15 @@
 {
   "platform": "gfg",
-  "id": "2210",
-  "title": "Count Indices That Escape Array",
+  "id": "2211",
+  "title": "Largest with Same Parity Adjacent Swaps",
   "slug": "1",
   "difficulty": "Medium",
   "difficultyClass": "medium",
-  "url": "https://www.geeksforgeeks.org/problems/good-stones--170647/1",
-  "date": "2026-10-19",
+  "url": "https://www.geeksforgeeks.org/problems/even-swap/1",
+  "date": "2026-10-20",
   "tags": [
-    "Greedy",
-    "Dynamic Programming",
-    "Graph",
-    "DFS"
+    "Arrays",
+    "Sorting"
   ],
-  "syncedAt": "2026-10-19 18:13 UTC"
+  "syncedAt": "2026-10-19 19:20 UTC"
 }

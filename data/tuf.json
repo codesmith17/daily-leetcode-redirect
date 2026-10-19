@@ -1,16 +1,15 @@
 {
   "platform": "tuf",
-  "id": "#140",
-  "title": "Divide two numbers without multiplication and division",
-  "slug": "divide-two-numbers-without-multiplication-and-division",
+  "id": "#131",
+  "title": "Maximum Depth in BT",
+  "slug": "maximum-depth-in-bt",
   "difficulty": "Core",
   "difficultyClass": "medium",
-  "url": "https://takeuforward.org/practice/dsa/divide-two-numbers-without-multiplication-and-division",
-  "date": "2026-10-19",
+  "url": "https://takeuforward.org/practice/dsa/maximum-depth-in-bt",
+  "date": "2026-10-20",
   "tags": [
     "DSA",
-    "Bit Manipulation",
     "TUF+ POTD"
   ],
-  "syncedAt": "2026-10-19 18:13 UTC"
+  "syncedAt": "2026-10-19 19:20 UTC"
 }
