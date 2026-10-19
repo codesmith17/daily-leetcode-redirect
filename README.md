@@ -55,36 +55,18 @@ daily-leetcode-redirect/
 
 ---
 
-## 🛠️ How to Deploy to GitHub Pages (2 Minutes)
+## 🌐 Live URL
 
-### Step 1: Create a New GitHub Repository
-1. Go to [github.com/new](https://github.com/new).
-2. Name your repo `daily-leetcode-redirect` (or any name you prefer).
-3. Keep it **Public** (required for free GitHub Pages).
-4. Leave "Add a README" **unchecked** (we already have one).
+👉 **[https://codesmith17.github.io/daily-leetcode-redirect/](https://codesmith17.github.io/daily-leetcode-redirect/)**
 
-### Step 2: Push Your Local Repo
-In your terminal, inside this directory:
-```bash
-git remote add origin https://github.com/<YOUR_USERNAME>/daily-leetcode-redirect.git
-git branch -M main
-git push -u origin main
-```
+Bookmark this link in your browser to immediately open today's LeetCode Daily Challenge!
 
-### Step 3: Enable GitHub Pages
-1. Open your repository on GitHub.
-2. Go to **Settings** → **Pages** (under "Code and automation" in the left sidebar).
-3. Under **Build and deployment**:
-   - **Source**: `Deploy from a branch`
-   - **Branch**: `main` / `/ (root)`
-4. Click **Save**.
-5. Your live link will be ready at:
-   `https://<YOUR_USERNAME>.github.io/daily-leetcode-redirect/`
+---
 
-### Step 4: Enable Workflow Write Permissions (For Auto-Sync)
-1. Go to **Settings** → **Actions** → **General**.
-2. Scroll down to **Workflow permissions**.
-3. Select **Read and write permissions**.
-4. Click **Save**.
+## 🛠️ GitHub Repository
+
+- **Repository**: [https://github.com/codesmith17/daily-leetcode-redirect](https://github.com/codesmith17/daily-leetcode-redirect)
+- **Live Pages**: [https://codesmith17.github.io/daily-leetcode-redirect/](https://codesmith17.github.io/daily-leetcode-redirect/)
 
 That's it! GitHub Actions will now automatically keep your repository synced, and your frontend will always verify against the user's browser time to guarantee the correct question opens.
+
