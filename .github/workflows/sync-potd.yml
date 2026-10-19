@@ -29,19 +29,20 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
-          python-version: "3.11"
+          go-version: "1.23"
+          cache: false
 
       - name: Sync POTD challenges & regenerate pages
-        run: python scripts/sync-potd.py
+        run: go run ./cmd/sync
 
       - name: Commit and push if files changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html leetcode.html leetcode/index.html gfg.html gfg/index.html data/leetcode.json data/gfg.json data/daily.json
+          git add index.html leetcode.html leetcode/ leetocde/ gfg.html gfg/ data/
           if git diff --cached --quiet; then
             echo "Already up to date, nothing to commit."
           else

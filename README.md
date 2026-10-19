@@ -12,10 +12,19 @@ Lightning-fast, timezone-aware terminal redirect pages for both **LeetCode Probl
 | **GeeksforGeeks POTD** | 👉 **[https://codesmith17.github.io/daily-potd-redirect/gfg](https://codesmith17.github.io/daily-potd-redirect/gfg)** | `00:00 IST` (18:30 UTC) |
 
 Clean subpaths are also available:
-- LeetCode: `/leetcode` or root `/`
+- LeetCode: `/leetcode` or `/leetocde` (alias) or root `/`
 - GeeksforGeeks: `/gfg` or `/gfg.html`
 
 Bookmark either link in your browser to immediately jump into today's problem!
+
+---
+
+## ⌨️ Interactive Controls & Terminal Shortcuts
+
+- `[Space]` or `[Enter]` : Launch and open challenge immediately
+- `[C]` or `[Esc]` : Cancel auto-redirect countdown
+- `[R]` : Refresh and check challenge status
+- Live visual countdown timer with pulsing glow based on challenge difficulty (`Easy` = Emerald, `Medium` = Amber, `Hard` = Rose) and custom handcrafted SVG topic badges (DP, Stack, Queue, Graph, Tree, Array, Sorting, Greedy, Binary Search, DFS, BFS, Math, String, Hash).
 
 ---
 
@@ -36,24 +45,31 @@ The `data/` directory and HTML pages are synced automatically:
 
 ---
 
-## 📁 Consistent Project Architecture
+## 📁 2-File Golang Architecture
+
+The automation engine is written in standard library **Go (Golang)** across **2 clean files** with zero external dependencies:
 
 ```
 daily-potd-redirect/
 ├── .github/
 │   └── workflows/
-│       └── sync-potd.yml               # Multi-schedule sync workflow
+│       └── sync-potd.yml               # Multi-schedule sync workflow with Go 1.23
+├── cmd/
+│   └── sync/
+│       ├── main.go                     # Entrypoint, topic SVG icon registry, data mirrorer
+│       └── sync.go                     # LeetCode (GraphQL/mirror) & GFG (Practice API) synchronizer
+├── go.mod                              # Go module definition (stdlib only)
 ├── data/
 │   ├── leetcode.json                   # Standardized LeetCode POTD JSON
 │   ├── gfg.json                        # Standardized GeeksforGeeks POTD JSON
 │   └── daily.json                      # Backward-compatible alias
 ├── templates/
-│   ├── leetcode.html                   # LeetCode terminal template
-│   └── gfg.html                        # GeeksforGeeks terminal template
-├── scripts/
-│   └── sync-potd.py                    # Unified POTD sync script
+│   ├── leetcode.html                   # LeetCode terminal template with SVG icons & difficulty glow
+│   └── gfg.html                        # GeeksforGeeks terminal template with SVG icons & difficulty glow
 ├── leetcode/
 │   └── index.html                      # /leetcode path
+├── leetocde/
+│   └── index.html                      # /leetocde path
 ├── gfg/
 │   └── index.html                      # /gfg path
 ├── index.html                          # Root redirect (LeetCode POTD)

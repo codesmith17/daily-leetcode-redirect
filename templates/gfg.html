@@ -375,7 +375,7 @@
       </div>
       <div style="display: flex; align-items: center; gap: 8px;">
         <span id="badge-status" class="pill verified">live check</span>
-        <a href="index.html" class="nav-switch">⚡ Switch to LeetCode &rarr;</a>
+        <a id="nav-switch-btn" href="leetcode" data-target="leetcode" class="nav-switch">⚡ Switch to LeetCode &rarr;</a>
       </div>
     </div>
 
@@ -443,6 +443,16 @@
         tags: __TAGS_JSON__,
         syncedAt: "__SYNCED_AT__"
       };
+
+      // Dynamic subpath resolution
+      const isSubdir = window.location.pathname.includes('/leetcode') || window.location.pathname.includes('/gfg') || window.location.pathname.includes('/leetocde');
+      const basePath = isSubdir ? "../data/" : "data/";
+
+      const navSwitchBtn = document.getElementById("nav-switch-btn");
+      if (navSwitchBtn) {
+        const target = navSwitchBtn.getAttribute("data-target") || "leetcode";
+        navSwitchBtn.href = (isSubdir ? "../" : "./") + target;
+      }
 
       // Comprehensive algorithmic topic icons & color mappings
       const TOPIC_REGISTRY = {
@@ -615,7 +625,7 @@
       });
 
       // Fetch fresh repo data with cache-bust
-      fetch("data/gfg.json?t=" + Date.now(), { cache: "no-store" })
+      fetch(basePath + "gfg.json?t=" + Date.now(), { cache: "no-store" })
         .then(res => res.json())
         .then(jsonData => {
           if (jsonData && jsonData.url) {

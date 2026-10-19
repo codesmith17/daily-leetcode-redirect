@@ -374,7 +374,7 @@
       </div>
       <div style="display: flex; align-items: center; gap: 8px;">
         <span id="badge-status" class="pill verified">live check</span>
-        <a href="gfg.html" class="nav-switch">🌿 Switch to GFG &rarr;</a>
+        <a id="nav-switch-btn" href="gfg" data-target="gfg" class="nav-switch">🌿 Switch to GFG &rarr;</a>
       </div>
     </div>
 
@@ -423,7 +423,7 @@
       <div class="shortcuts-hint">
         <kbd>Space</kbd> pause &bull; <kbd>Enter</kbd> open &bull; <kbd>C</kbd> copy
       </div>
-      <span>Synced: 2026-10-19 05:53 UTC</span>
+      <span>Synced: 2026-10-19 06:08 UTC</span>
     </div>
   </main>
 
@@ -439,9 +439,19 @@
         difficultyClass: "easy",
         url: "https://leetcode.com/problems/find-target-indices-after-sorting-array/",
         date: "2026-10-19",
-        tags: ["Array", "Binary Search", "Sorting"],
-        syncedAt: "2026-10-19 05:53 UTC"
+        tags: ["Array","Binary Search","Sorting"],
+        syncedAt: "2026-10-19 06:08 UTC"
       };
+
+      // Dynamic subpath resolution
+      const isSubdir = window.location.pathname.includes('/leetcode') || window.location.pathname.includes('/gfg') || window.location.pathname.includes('/leetocde');
+      const basePath = isSubdir ? "../data/" : "data/";
+
+      const navSwitchBtn = document.getElementById("nav-switch-btn");
+      if (navSwitchBtn) {
+        const target = navSwitchBtn.getAttribute("data-target") || "gfg";
+        navSwitchBtn.href = (isSubdir ? "../" : "./") + target;
+      }
 
       // Comprehensive algorithmic topic icons & color mappings
       const TOPIC_REGISTRY = {
@@ -534,7 +544,6 @@
         diffEl.textContent = diff;
         diffEl.className = `pill difficulty ${diffClass}`;
 
-        // Dynamic ambient backlight
         if (diffClass === "easy") {
           document.documentElement.style.setProperty("--ambient-glow", "rgba(52, 211, 153, 0.16)");
         } else if (diffClass === "hard") {
@@ -547,7 +556,6 @@
           dateEl.textContent = data.date.slice(0, 10);
         }
 
-        // Render topic tags
         if (Array.isArray(data.tags) && data.tags.length > 0) {
           const tagsHtml = data.tags.slice(0, 4).map(t => getTagMarkup(typeof t === "string" ? t : t.name)).join("");
           tagsRow.innerHTML = `<span id="problem-difficulty" class="pill difficulty ${diffClass}">${diff}</span><span id="problem-date" class="pill date">${data.date ? data.date.slice(0, 10) : ""}</span>${tagsHtml}`;
@@ -596,7 +604,6 @@
         });
       });
 
-      // Keyboard shortcuts: Space = Pause, Enter = Open, C = Copy
       window.addEventListener("keydown", (e) => {
         if (e.code === "Space") {
           e.preventDefault();
@@ -608,7 +615,6 @@
         }
       });
 
-      // Verification against live POTD
       const todayUtc = new Date().toISOString().slice(0, 10);
       const isBundledStale = bundled.date !== todayUtc;
 
@@ -648,7 +654,7 @@
         startRedirect();
       })
       .catch(() => {
-        return fetch("data/leetcode.json?t=" + Date.now(), { cache: "no-store" })
+        return fetch(basePath + "leetcode.json?t=" + Date.now(), { cache: "no-store" })
           .then(res => res.json())
           .then(jsonData => {
             if (jsonData && jsonData.url) {
