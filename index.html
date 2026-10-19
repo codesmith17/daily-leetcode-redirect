@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2089. Find Target Indices After Sorting Array — LeetCode Daily Challenge</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-hover: #1f242c;
+      --border: #30363d;
+      --border-accent: #388bfd33;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #f0883e;
+      --accent-glow: rgba(240, 136, 62, 0.15);
+      --easy: #3fb950;
+      --medium: #d29922;
+      --hard: #f85149;
+      --info: #58a6ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-monospace, "JetBrains Mono", "Fira Code", "SFMono-Regular", Menlo, Consolas, monospace;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--info));
+    }
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .window-controls {
+      display: flex;
+      gap: 6px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #484f58;
+    }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+    .path {
+      letter-spacing: .04em;
+      color: var(--muted);
+    }
+    .path::before { content: "~/"; }
+    .line {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .prompt {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .problem-container {
+      margin: 16px 0 14px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .problem-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+      margin-bottom: 10px;
+      word-break: break-word;
+    }
+    .meta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid currentColor;
+    }
+    .pill.easy { color: var(--easy); background: rgba(63, 185, 80, 0.1); }
+    .pill.medium { color: var(--medium); background: rgba(210, 153, 34, 0.1); }
+    .pill.hard { color: var(--hard); background: rgba(248, 81, 73, 0.1); }
+    .pill.verified { color: var(--info); border-color: var(--info); background: rgba(88, 166, 255, 0.1); }
+    .time-info {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      border-top: 1px dashed var(--border);
+      padding-top: 8px;
+    }
+    .time-item {
+      display: flex;
+      justify-content: space-between;
+    }
+    .time-label { color: var(--muted); }
+    .time-value { color: var(--text); }
+    .progress-bar-container {
+      margin-top: 16px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.1s linear;
+    }
+    .action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #0d1117;
+      border: 1px solid var(--accent);
+    }
+    .btn-primary:hover {
+      background: #f89a55;
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      color: var(--text);
+      border-color: var(--muted);
+      background: var(--surface-hover);
+    }
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--accent);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    .footer {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .footer a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+    .footer a:hover {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <noscript>
+    <meta http-equiv="refresh" content="0; url=https://leetcode.com/problems/find-target-indices-after-sorting-array/">
+  </noscript>
+
+  <main class="card">
+    <div class="header-bar">
+      <div class="window-controls">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
+      <div class="path">leetcode-potd %</div>
+      <span id="badge-status" class="pill verified">live check</span>
+    </div>
+
+    <div class="line">
+      <span class="prompt">$</span>
+      <span>fetch --potd --tz local</span>
+    </div>
+
+    <div class="problem-container">
+      <div class="problem-title" id="problem-title">2089. Find Target Indices After Sorting Array</div>
+      <div class="meta-row">
+        <span id="problem-difficulty" class="pill easy">Easy</span>
+        <span id="problem-date" class="status">2026-10-19</span>
+      </div>
+
+      <div class="time-info">
+        <div class="time-item">
+          <span class="time-label">Local Browser Time:</span>
+          <span class="time-value" id="local-time-display">--</span>
+        </div>
+        <div class="time-item">
+          <span class="time-label">Next POTD Reset (00:00 UTC):</span>
+          <span class="time-value" id="reset-countdown">--</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="line">
+      <span class="prompt">&gt;</span>
+      <span id="redirect-status">Verifying daily question...</span>
+      <span class="cursor" aria-hidden="true"></span>
+    </div>
+
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div class="action-row">
+      <a class="btn btn-primary" id="open-link" href="https://leetcode.com/problems/find-target-indices-after-sorting-array/">Open Problem &rarr;</a>
+      <button class="btn btn-secondary" id="pause-btn">Pause</button>
+    </div>
+
+    <div class="footer">
+      <span>Auto-redirects based on browser time</span>
+      <span>Last sync: 2026-10-19 05:18 UTC</span>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      // Bundled fallback data generated during build
+      const bundled = {
+        id: "2089",
+        title: "Find Target Indices After Sorting Array",
+        slug: "find-target-indices-after-sorting-array",
+        difficulty: "Easy",
+        difficultyClass: "easy",
+        url: "https://leetcode.com/problems/find-target-indices-after-sorting-array/",
+        date: "2026-10-19",
+        syncedAt: "2026-10-19 05:18 UTC"
+      };
+
+      let targetUrl = bundled.url || "https://leetcode.com/problemset/all/";
+      let isPaused = false;
+      let redirectTimeout = null;
+      let progressInterval = null;
+      const REDIRECT_DURATION = 1400; // ms to let user see problem and allow pause
+      let startTime = null;
+
+      // DOM elements
+      const titleEl = document.getElementById("problem-title");
+      const diffEl = document.getElementById("problem-difficulty");
+      const dateEl = document.getElementById("problem-date");
+      const statusEl = document.getElementById("redirect-status");
+      const openLinkEl = document.getElementById("open-link");
+      const pauseBtn = document.getElementById("pause-btn");
+      const progressBar = document.getElementById("progress-bar");
+      const badgeStatus = document.getElementById("badge-status");
+      const localTimeEl = document.getElementById("local-time-display");
+      const resetCountdownEl = document.getElementById("reset-countdown");
+
+      // Display user local time & countdown to 00:00 UTC
+      function updateClock() {
+        const now = new Date();
+        try {
+          const options = {
+            year: "numeric", month: "short", day: "numeric",
+            hour: "2-digit", minute: "2-digit", second: "2-digit",
+            timeZoneName: "short"
+          };
+          localTimeEl.textContent = new Intl.DateTimeFormat(undefined, options).format(now);
+        } catch (e) {
+          localTimeEl.textContent = now.toLocaleString();
+        }
+
+        // Calculate time remaining until next 00:00 UTC
+        const nextUtcMidnight = new Date(Date.UTC(
+          now.getUTCFullYear(),
+          now.getUTCMonth(),
+          now.getUTCDate() + 1,
+          0, 0, 0, 0
+        ));
+        const diffMs = nextUtcMidnight - now;
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        const diffSecs = Math.floor((diffMs % (1000 * 60)) / 1000);
+        resetCountdownEl.textContent = `${diffHours}h ${diffMins}m ${diffSecs}s`;
+      }
+
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      function setProblem(data, sourceLabel) {
+        if (!data || !data.slug) return;
+        targetUrl = data.url || `https://leetcode.com/problems/${data.slug}/`;
+        const id = data.id || data.frontendId || "";
+        const title = data.title || data.questionTitle || "";
+        titleEl.textContent = id ? `${id}. ${title}` : title;
+        document.title = `${id ? id + ". " : ""}${title} — LeetCode Daily`;
+
+        const diff = (data.difficulty || "Medium").toUpperCase();
+        const diffClass = diff.toLowerCase();
+        diffEl.textContent = diff;
+        diffEl.className = `pill ${diffClass}`;
+
+        if (data.date) {
+          dateEl.textContent = data.date;
+        }
+        openLinkEl.href = targetUrl;
+        badgeStatus.textContent = sourceLabel;
+      }
+
+      function startRedirect() {
+        if (isPaused) return;
+        startTime = Date.now();
+        statusEl.textContent = "Redirecting to problem...";
+
+        if (progressInterval) clearInterval(progressInterval);
+        progressInterval = setInterval(() => {
+          if (isPaused) return;
+          const elapsed = Date.now() - startTime;
+          const percent = Math.min(100, (elapsed / REDIRECT_DURATION) * 100);
+          progressBar.style.width = percent + "%";
+          if (elapsed >= REDIRECT_DURATION) {
+            clearInterval(progressInterval);
+            window.location.replace(targetUrl);
+          }
+        }, 30);
+      }
+
+      pauseBtn.addEventListener("click", () => {
+        isPaused = !isPaused;
+        if (isPaused) {
+          pauseBtn.textContent = "Resume";
+          statusEl.textContent = "Redirect paused";
+          if (progressInterval) clearInterval(progressInterval);
+        } else {
+          pauseBtn.textContent = "Pause";
+          startRedirect();
+        }
+      });
+
+      // Verification logic:
+      // LeetCode's active POTD switches at 00:00 UTC.
+      // Compare bundled date with current UTC date:
+      const todayUtc = new Date().toISOString().slice(0, 10);
+      const isBundledStale = bundled.date !== todayUtc;
+
+      if (isBundledStale) {
+        badgeStatus.textContent = "checking live...";
+        badgeStatus.className = "pill medium";
+        statusEl.textContent = "Syncing fresh POTD...";
+      } else {
+        badgeStatus.textContent = "verified today";
+        badgeStatus.className = "pill easy";
+      }
+
+      // Fetch live data with timeout to guarantee we never redirect to stale problem
+      const liveControllers = new AbortController();
+      const timeoutId = setTimeout(() => liveControllers.abort(), 2500);
+
+      // We attempt alfa-leetcode-api first, then local daily.json with cache bust
+      fetch("https://alfa-leetcode-api.onrender.com/daily", {
+        signal: liveControllers.signal,
+        cache: "no-store"
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("API returned " + res.status);
+        return res.json();
+      })
+      .then(data => {
+        clearTimeout(timeoutId);
+        if (data && data.titleSlug) {
+          setProblem({
+            id: data.questionFrontendId || data.questionId,
+            title: data.questionTitle,
+            slug: data.titleSlug,
+            difficulty: data.difficulty,
+            url: data.questionLink || `https://leetcode.com/problems/${data.titleSlug}/`,
+            date: data.date
+          }, "⚡ live verified");
+        }
+        startRedirect();
+      })
+      .catch(() => {
+        // Fallback: check repository daily.json with cache-bust
+        return fetch("data/daily.json?t=" + Date.now(), { cache: "no-store" })
+          .then(res => res.json())
+          .then(jsonData => {
+            if (jsonData && jsonData.titleSlug) {
+              setProblem(jsonData, "✓ synced repo");
+            }
+            startRedirect();
+          })
+          .catch(() => {
+            // Ultimate fallback: bundled static data
+            setProblem(bundled, "offline cache");
+            startRedirect();
+          });
+      });
+    })();
+  </script>
+</body>
+</html>
