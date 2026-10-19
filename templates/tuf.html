@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>__TITLE__ — takeUforward (TUF+) POTD</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+  <style>
+    :root {
+      --bg: #070b14;
+      --surface: #0c1220;
+      --surface-elevated: #111a2e;
+      --surface-hover: #17243e;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(50, 124, 246, 0.45);
+      --text: #f8fafc;
+      --text-dim: #93c5fd;
+      --muted: #4b5d78;
+      --accent: #327cf6;
+      --accent-secondary: #f59e0b;
+      --accent-glow: rgba(50, 124, 246, 0.28);
+      --easy: #10b981;
+      --medium: #38bdf8;
+      --hard: #f43f5e;
+      --info: #38bdf8;
+      --ambient-glow: rgba(50, 124, 246, 0.16);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      background-image: 
+        radial-gradient(ellipse at 50% 0%, var(--ambient-glow) 0%, transparent 65%),
+        radial-gradient(circle at 100% 100%, rgba(50, 124, 246, 0.06) 0%, transparent 40%),
+        linear-gradient(180deg, #070b14 0%, #090e1a 100%);
+      color: var(--text);
+      font-family: ui-monospace, "JetBrains Mono", "Fira Code", "SFMono-Regular", Menlo, monospace;
+      padding: 20px;
+      overflow-x: hidden;
+      transition: background 0.4s ease;
+    }
+    .card {
+      width: 100%;
+      max-width: 550px;
+      background: linear-gradient(180deg, rgba(12, 18, 32, 0.95), rgba(7, 11, 20, 0.98));
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 26px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 50px var(--ambient-glow);
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, var(--accent) 30%, var(--accent-secondary) 70%, transparent 100%);
+      opacity: 0.95;
+    }
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .window-controls {
+      display: flex;
+      gap: 7px;
+    }
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      transition: transform 0.15s ease;
+    }
+    .dot:hover { transform: scale(1.15); }
+    .dot.red { background: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+    .dot.yellow { background: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.4); }
+    .dot.green { background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+    .nav-switches {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .nav-switch {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-switch:hover {
+      color: #fff;
+      border-color: rgba(50, 124, 246, 0.5);
+      background: rgba(50, 124, 246, 0.1);
+    }
+    .nav-switch.active {
+      color: #fff;
+      border-color: var(--accent);
+      background: rgba(50, 124, 246, 0.18);
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-text-title {
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    .brand-text-title span {
+      color: var(--accent);
+    }
+    .brand-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: rgba(50, 124, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(50, 124, 246, 0.35);
+    }
+    .rewards-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 3px 9px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
+    }
+    .title-section {
+      margin-bottom: 16px;
+    }
+    .problem-id {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .problem-title {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+      word-break: break-word;
+    }
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .pill-difficulty {
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .pill-difficulty.easy {
+      color: var(--easy);
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.35);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.18);
+    }
+    .pill-difficulty.medium {
+      color: var(--medium);
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.18);
+    }
+    .pill-difficulty.hard {
+      color: var(--hard);
+      background: rgba(244, 63, 94, 0.12);
+      border-color: rgba(244, 63, 94, 0.35);
+      box-shadow: 0 0 12px rgba(244, 63, 94, 0.18);
+    }
+    .topic-tag {
+      color: var(--tag-color, #94a3b8);
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.08);
+      transition: all 0.2s ease;
+    }
+    .topic-tag:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: var(--tag-color, rgba(255, 255, 255, 0.2));
+    }
+    .topic-tag svg {
+      flex-shrink: 0;
+    }
+    .status-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 22px;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+    .status-row:last-child { margin-bottom: 0; }
+    .status-label {
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-value {
+      font-weight: 600;
+      color: var(--text);
+    }
+    .status-value.countdown {
+      font-size: 15px;
+      color: var(--accent);
+      font-feature-settings: "tnum";
+      font-variant-numeric: tabular-nums;
+    }
+    .progress-bar-wrap {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent-secondary) 100%);
+      transform-origin: left;
+      transition: transform 0.05s linear;
+    }
+    .action-group {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 13px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35);
+      transition: all 0.2s ease;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(37, 99, 235, 0.5);
+    }
+    .btn-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 16px;
+      background: var(--surface-elevated);
+      color: var(--text-dim);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .kbd-hint {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    kbd {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+    .pulsing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="header-bar">
+      <div class="window-controls">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
+      <div class="nav-switches">
+        <a href="../" class="nav-switch" id="nav-lc-btn">⚡ LeetCode</a>
+        <a href="../gfg" class="nav-switch" id="nav-gfg-btn">🌿 GFG</a>
+        <a href="../tuf" class="nav-switch active" id="nav-tuf-btn">🎯 TUF+</a>
+      </div>
+    </div>
+
+    <div class="brand-row">
+      <div class="brand">
+        <div class="brand-logo-wrap">
+          <svg width="130" height="22" viewBox="0 0 152 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="takeUforward">
+            <path d="M148.386 5.17029L149.948 5.17139L149.947 18.1873L148.426 18.1883L148.406 16.6288C146.994 18.5625 144.999 18.7631 142.905 17.7959C139.046 15.2508 140.855 8.83757 145.692 9.45673C146.956 9.61858 147.618 10.1154 148.395 11.0762C148.327 9.22427 148.379 7.04851 148.386 5.17029ZM146.235 16.9207C147.908 16.4976 148.924 14.7982 148.507 13.1212C148.089 11.4441 146.394 10.4218 144.719 10.8354C143.036 11.2507 142.01 12.9555 142.429 14.6392C142.848 16.323 144.554 17.3454 146.235 16.9207Z" fill="#ffffff"></path>
+            <path d="M45.7231 9.48384C47.5738 9.3688 48.3815 9.66307 49.5968 11.0487L49.5988 9.60296L51.148 9.60214C51.192 12.4247 51.1516 15.3561 51.1519 18.1876L49.6297 18.1875L49.6096 16.7142L49.3509 17.0105C48.4151 18.115 47.1724 18.4674 45.7765 18.3068C40.9156 17.7476 40.6624 10.2251 45.7231 9.48384ZM47.4391 16.9221C49.1158 16.5024 50.1358 14.8016 49.7179 13.1223C49.2999 11.443 47.6022 10.4205 45.9248 10.8378C44.2458 11.2555 43.2234 12.9576 43.6418 14.6386C44.0601 16.3195 45.7606 17.3422 47.4391 16.9221Z" fill="#ffffff"></path>
+            <path d="M127.367 9.48564C129.193 9.37776 130.024 9.63329 131.227 11.0374L131.228 9.60386L132.776 9.6009L132.78 18.1872L131.281 18.1876L131.248 16.677C131.142 16.8469 130.974 17.0386 130.844 17.1961C130.236 17.7983 129.683 18.1317 128.804 18.2796C124.55 18.9958 122.339 14.377 124.573 11.0569C125.211 10.1088 126.232 9.65909 127.367 9.48564ZM129.032 16.9401C130.73 16.5524 131.787 14.8526 131.385 13.1557C130.983 11.4588 129.275 10.4159 127.584 10.8338C125.915 11.2465 124.889 12.9297 125.287 14.6053C125.684 16.281 127.356 17.3229 129.032 16.9401Z" fill="#ffffff"></path>
+            <path d="M95.7381 9.48393C97.0635 9.39676 98.1748 9.46257 99.3296 10.2385C101.326 11.5691 101.684 14.5922 100.368 16.5161C99.6678 17.5386 98.6311 18.0624 97.4379 18.2784C96.0534 18.4374 94.7405 18.3078 93.5584 17.4608C91.6223 16.0849 91.3366 13.0163 92.6989 11.1503C93.4521 10.1188 94.5139 9.66456 95.7381 9.48393ZM97.2082 16.9373C98.9043 16.5431 99.9543 14.8404 99.5467 13.1454C99.1391 11.4505 97.4298 10.4129 95.7411 10.8349C94.0708 11.252 93.0497 12.9393 93.4521 14.6147C93.8552 16.2901 95.5314 17.327 97.2082 16.9373Z" fill="#ffffff"></path>
+            <path d="M121.233 9.60304L122.98 9.60349L122.746 10.3653C122.591 10.6599 121.983 12.4222 121.844 12.817C121.218 14.5968 120.524 16.4016 119.936 18.1875L117.829 18.1874C117.688 17.546 117.322 16.5165 117.113 15.8674L115.77 11.7058C115.117 13.3353 114.22 16.4217 113.678 18.1877L111.584 18.1863C111.093 16.4418 110.271 14.6517 109.712 12.9179C109.359 11.8224 108.848 10.7182 108.563 9.60437L110.265 9.60282C111.092 11.77 111.764 14.5954 112.628 16.6702C113.179 14.7899 114.21 11.4003 114.88 9.6026H116.64C116.9 10.2122 117.127 11.0893 117.339 11.7278C117.875 13.3393 118.326 15.0716 118.908 16.6617C119.726 14.3955 120.437 11.9064 121.233 9.60304Z" fill="#ffffff"></path>
+            <path d="M65.9764 9.48304C66.2403 9.46389 66.5048 9.4559 66.7694 9.45908C69.7183 9.48814 71.1896 11.5205 71.1606 14.3271L63.7836 14.332C63.9045 15.0095 64.1273 15.5726 64.5965 16.0884C65.111 16.6482 65.8262 16.9809 66.5852 17.0136C67.4954 17.0554 68.1868 16.7446 68.8456 16.1446L69.2576 15.6038L70.918 15.6089C70.7484 15.9344 70.5704 16.2758 70.3694 16.5825C69.0855 18.5423 65.8511 18.8873 63.9916 17.552C63.0717 16.8806 62.4582 15.8687 62.2878 14.7416C61.8587 12.0645 63.2708 9.90892 65.9764 9.48304ZM63.813 13.2763L67.4332 13.2619L69.5379 13.2547C69.1197 11.2808 67.9812 10.63 66.0224 10.814C65.1961 11.0568 64.5903 11.48 64.1703 12.2511C63.9971 12.5715 63.8765 12.9176 63.813 13.2763Z" fill="#ffffff"></path>
+            <path d="M82.1899 6.15445L83.8358 6.13364L83.8321 7.43076L83.8402 10.9872C83.8424 13.0489 84.0277 15.4057 82.4506 16.9342C79.878 19.4261 74.3062 18.6484 73.5686 14.7218C73.2976 13.2794 73.3618 12.1096 73.3628 10.6782L73.3655 6.1371C73.8639 6.16265 74.4442 6.14066 74.9493 6.13366L74.9367 12.2434C74.9441 14.7697 75.6966 17.0285 78.5955 16.9663C82.4469 16.8836 82.2121 13.553 82.2098 10.8768C82.2113 9.30264 82.2047 7.7285 82.1899 6.15445Z" fill="#327CF6"></path>
+            <path d="M53.6812 5.17072L55.2368 5.17154L55.2394 13.7753L59.3145 9.60339L61.44 9.60754C60.4114 10.7407 59.1022 11.933 58.017 13.069C58.6388 14.0243 59.4778 15.1415 60.1485 16.0859C60.6592 16.7723 61.1534 17.4709 61.6308 18.1809L59.6346 18.1865C59.0302 17.1144 57.5863 15.1419 56.8446 14.0624C56.3014 14.5207 55.767 14.9892 55.2414 15.4676L55.2356 18.1873L53.6797 18.186L53.6812 5.17072Z" fill="#ffffff"></path>
+            <path d="M89.3611 5.19071C89.8816 5.15014 90.7322 5.17284 91.2764 5.17139L91.2779 6.49106C90.6961 6.47097 90.1231 6.4962 89.5405 6.51555C88.5872 7.17148 88.8848 8.53138 88.8981 9.6003L91.275 9.60237L91.2764 10.9227C90.4989 10.9041 89.6778 10.9223 88.8966 10.9274L88.8974 17.1166L88.8966 18.1871L87.346 18.1874L87.3431 10.9211C86.7708 10.9114 86.1609 10.9246 85.585 10.927L85.5872 9.60281L87.3379 9.60244C87.3231 7.61233 86.9104 5.64576 89.3611 5.19071Z" fill="#ffffff"></path>
+            <path d="M38.3237 7.20956L38.4381 7.2903C38.5002 7.83083 38.4639 9.01184 38.4613 9.60039L40.8434 9.60231L40.8448 10.9237C40.0752 10.901 39.2348 10.9222 38.4598 10.9271C38.456 11.8758 38.2986 16.0384 38.7023 16.5916C39.254 16.9101 40.1878 16.8072 40.8426 16.7959C40.8392 17.1785 40.951 17.7684 40.7938 18.0771C40.5931 18.2309 40.5479 18.182 40.2604 18.1853C36.8396 18.2311 36.8942 17.495 36.8993 14.385L36.9101 10.9207C36.3402 10.9107 35.7286 10.9251 35.1553 10.9282L35.1573 9.60268C37.3771 9.64867 36.9812 9.15772 37.2932 7.21522L38.3237 7.20956Z" fill="#ffffff"></path>
+            <path d="M136.923 11.0924C137.803 9.6477 138.676 9.59564 140.228 9.60141L140.231 10.9234C138.158 10.871 137.052 11.1988 136.938 13.4535L136.921 18.187L135.358 18.1869L135.361 9.60392L136.923 9.60119C136.933 10.0827 136.924 10.6074 136.923 11.0924Z" fill="#ffffff"></path>
+            <path d="M103.167 9.60452L104.717 9.60052L104.723 11.1063C105.667 9.64822 106.407 9.59661 108.035 9.60156L108.034 10.9222C105.911 10.8717 104.86 11.2356 104.73 13.5096L104.716 18.1879L103.165 18.1872L103.167 9.60452Z" fill="#ffffff"></path>
+            <path d="M20.0547 3.09322C21.0405 3.02285 22.2162 3.05106 23.2192 3.04703C24.4527 4.62342 25.6328 6.85019 26.8535 8.50655C26.0441 9.18308 21.1301 13.7002 20.6141 13.9252C19.1581 14.0093 17.4455 13.9447 15.9713 13.9598C12.5963 13.9942 9.17458 13.9124 5.80447 13.966C5.29149 15.9429 4.60527 18.8116 4.23645 20.8052L0 20.798V20.6486C0.288055 19.6736 0.537812 18.4533 0.768622 17.4491L2.04101 11.8766C2.37695 10.4052 2.61524 8.96821 3.25319 7.51645C5.92211 1.44265 12.6659 3.39408 17.866 3.05693C18.4713 3.01767 19.4708 3.03728 20.0547 3.09322ZM6.91816 9.96297L18.472 9.96852C18.1908 11.1543 17.772 12.7166 17.574 13.8851C19.4172 12.1301 21.6293 10.1523 23.5641 8.50263C22.3944 6.75206 21.2514 4.87418 20.0647 3.15983C19.7143 4.32493 19.3681 5.92785 19.1198 7.13862L12.6642 7.19262C9.4686 7.22867 8.2533 6.70353 6.91816 9.96297Z" fill="#ffffff"></path>
+            <path d="M20.0549 3.09322C21.0407 3.02285 22.2164 3.05106 23.2194 3.04703C24.4529 4.62342 25.633 6.85019 26.8537 8.50655C26.0443 9.18308 21.1304 13.7002 20.6143 13.9252C19.7723 13.9016 18.3223 13.9695 17.5742 13.8851C19.4174 12.1301 21.6295 10.1523 23.5643 8.50263C22.3946 6.75206 21.2516 4.87418 20.0649 3.15983L20.0549 3.09322Z" fill="#327CF6"></path>
+          </svg>
+        </div>
+        <span class="brand-badge">POTD</span>
+      </div>
+      <div class="rewards-pill">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 12h8" stroke="#000" stroke-width="2"/>
+        </svg>
+        <span>+20 Coins</span>
+      </div>
+    </div>
+
+    <div class="title-section">
+      <div class="problem-id">TUF Problem __ID__</div>
+      <h1 class="problem-title" id="problem-title">__TITLE__</h1>
+    </div>
+
+    <div class="pills">
+      <span class="pill pill-difficulty __DIFFICULTY_CLASS__" id="pill-difficulty">__DIFFICULTY__</span>
+      __TAGS_HTML__
+    </div>
+
+    <div class="status-panel">
+      <div class="status-row">
+        <span class="status-label">
+          <span class="pulsing-dot"></span>
+          Redirecting to TUF
+        </span>
+        <span class="status-value countdown" id="countdown-text">2.5s</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      <div class="status-row" style="margin-top: 14px; font-size: 11px;">
+        <span class="status-label">TUF POTD Reset</span>
+        <span class="status-value" id="reset-in-text">12:00 AM IST</span>
+      </div>
+      <div class="status-row" style="font-size: 11px;">
+        <span class="status-label">Local Date</span>
+        <span class="status-value" id="local-date">__DATE__</span>
+      </div>
+    </div>
+
+    <div class="action-group">
+      <a href="__URL__" class="btn-primary" id="btn-redirect">
+        <span>Solve on takeUforward</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="7" y1="17" x2="17" y2="7"></line>
+          <polyline points="7 7 17 7 17 17"></polyline>
+        </svg>
+      </a>
+      <button type="button" class="btn-secondary" id="btn-cancel" title="Cancel auto-redirect">
+        Pause
+      </button>
+    </div>
+
+    <footer class="footer">
+      <span>takeUforward Striver's POTD</span>
+      <div class="kbd-hint">
+        <kbd>Space</kbd> open &nbsp;•&nbsp; <kbd>C</kbd> pause
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    (function() {
+      const BUNDLED_POTD = {
+        platform: "tuf",
+        id: "__ID__",
+        title: "__TITLE__",
+        slug: "__SLUG__",
+        difficulty: "__DIFFICULTY__",
+        difficultyClass: "__DIFFICULTY_CLASS__",
+        url: "__URL__",
+        date: "__DATE__",
+        tags: __TAGS_JSON__,
+        syncedAt: "__SYNCED_AT__"
+      };
+
+      // Dynamic subpath resolution
+      const isSubdir = window.location.pathname.includes('/tuf') || window.location.pathname.includes('/leetcode') || window.location.pathname.includes('/gfg');
+      const basePath = isSubdir ? "../data/" : "data/";
+
+      const navLcBtn = document.getElementById("nav-lc-btn");
+      const navGfgBtn = document.getElementById("nav-gfg-btn");
+      const navTufBtn = document.getElementById("nav-tuf-btn");
+
+      if (navLcBtn) navLcBtn.href = isSubdir ? "../leetcode" : "./leetcode";
+      if (navGfgBtn) navGfgBtn.href = isSubdir ? "../gfg" : "./gfg";
+      if (navTufBtn) navTufBtn.href = isSubdir ? "../tuf" : "./tuf";
+
+      let targetUrl = BUNDLED_POTD.url || "https://takeuforward.org/potd";
+      let autoRedirectCancelled = false;
+      const redirectBtn = document.getElementById("btn-redirect");
+      const cancelBtn = document.getElementById("btn-cancel");
+      const countdownEl = document.getElementById("countdown-text");
+      const progressBar = document.getElementById("progress-bar");
+      const localDateEl = document.getElementById("local-date");
+      const resetInEl = document.getElementById("reset-in-text");
+
+      // Compute local date & reset countdown (TUF resets at 00:00:00 IST / 18:30:00 UTC)
+      const now = new Date();
+      if (localDateEl) {
+        localDateEl.textContent = now.toLocaleDateString(undefined, {
+          weekday: 'short', month: 'short', day: 'numeric'
+        });
+      }
+
+      function updateResetCountdown() {
+        const current = new Date();
+        // 18:30 UTC is 00:00 IST
+        const nextReset = new Date(current);
+        nextReset.setUTCHours(18, 30, 0, 0);
+        if (current.getTime() >= nextReset.getTime()) {
+          nextReset.setUTCDate(nextReset.getUTCDate() + 1);
+        }
+        const diffMs = nextReset.getTime() - current.getTime();
+        const hrs = Math.floor(diffMs / 3600000);
+        const mins = Math.floor((diffMs % 3600000) / 60000);
+        if (resetInEl) {
+          resetInEl.textContent = `${hrs}h ${mins}m (12:00 AM IST)`;
+        }
+      }
+      updateResetCountdown();
+      setInterval(updateResetCountdown, 30000);
+
+      // Verify bundled challenge against live data/tuf.json with cache-busting
+      async function verifyLivePOTD() {
+        try {
+          const resp = await fetch(basePath + "tuf.json?t=" + Date.now());
+          if (resp.ok) {
+            const data = await resp.json();
+            if (data && data.url) {
+              targetUrl = data.url;
+              if (redirectBtn) redirectBtn.href = data.url;
+              const titleEl = document.getElementById("problem-title");
+              if (titleEl && data.title) titleEl.textContent = data.title;
+            }
+          }
+        } catch (e) {
+          console.warn("Could not fetch live tuf.json, using bundled data.", e);
+        }
+      }
+      verifyLivePOTD();
+
+      // Countdown redirect logic
+      const DURATION = 2500;
+      const startTime = performance.now();
+
+      function tick(now) {
+        if (autoRedirectCancelled) return;
+        const elapsed = now - startTime;
+        const remaining = Math.max(0, DURATION - elapsed);
+        const progress = Math.max(0, Math.min(1, 1 - (remaining / DURATION)));
+
+        if (countdownEl) {
+          countdownEl.textContent = (remaining / 1000).toFixed(1) + "s";
+        }
+        if (progressBar) {
+          progressBar.style.transform = `scaleX(${progress})`;
+        }
+
+        if (remaining <= 0) {
+          window.location.replace(targetUrl);
+        } else {
+          requestAnimationFrame(tick);
+        }
+      }
+      requestAnimationFrame(tick);
+
+      function cancelRedirect() {
+        autoRedirectCancelled = true;
+        if (countdownEl) countdownEl.textContent = "Paused";
+        if (cancelBtn) {
+          cancelBtn.textContent = "Resume";
+          cancelBtn.onclick = resumeRedirect;
+        }
+      }
+
+      function resumeRedirect() {
+        window.location.replace(targetUrl);
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", cancelRedirect);
+      }
+
+      // Keyboard shortcuts
+      window.addEventListener("keydown", function(e) {
+        if (e.code === "Space" || e.code === "Enter") {
+          e.preventDefault();
+          window.location.replace(targetUrl);
+        } else if (e.code === "KeyC" || e.code === "Escape") {
+          cancelRedirect();
+        } else if (e.code === "KeyR") {
+          window.location.reload();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

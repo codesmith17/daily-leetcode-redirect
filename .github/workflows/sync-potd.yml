@@ -42,7 +42,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html leetcode/ gfg/ data/
+          git add index.html leetcode/ gfg/ tuf/ data/
           if git diff --cached --quiet; then
             echo "Already up to date, nothing to commit."
           else

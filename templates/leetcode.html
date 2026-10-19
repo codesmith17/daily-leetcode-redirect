@@ -372,9 +372,10 @@
         <span class="dot yellow"></span>
         <span class="dot green"></span>
       </div>
-      <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 6px;">
         <span id="badge-status" class="pill verified">live check</span>
-        <a id="nav-switch-btn" href="gfg" data-target="gfg" class="nav-switch">🌿 Switch to GFG &rarr;</a>
+        <a id="nav-gfg-btn" href="gfg" class="nav-switch">🌿 GFG</a>
+        <a id="nav-tuf-btn" href="tuf" class="nav-switch">🎯 TUF+</a>
       </div>
     </div>
 
@@ -444,14 +445,13 @@
       };
 
       // Dynamic subpath resolution
-      const isSubdir = window.location.pathname.includes('/leetcode') || window.location.pathname.includes('/gfg');
+      const isSubdir = window.location.pathname.includes('/leetcode') || window.location.pathname.includes('/gfg') || window.location.pathname.includes('/tuf');
       const basePath = isSubdir ? "../data/" : "data/";
 
-      const navSwitchBtn = document.getElementById("nav-switch-btn");
-      if (navSwitchBtn) {
-        const target = navSwitchBtn.getAttribute("data-target") || "gfg";
-        navSwitchBtn.href = (isSubdir ? "../" : "./") + target;
-      }
+      const navGfgBtn = document.getElementById("nav-gfg-btn");
+      if (navGfgBtn) navGfgBtn.href = (isSubdir ? "../" : "./") + "gfg";
+      const navTufBtn = document.getElementById("nav-tuf-btn");
+      if (navTufBtn) navTufBtn.href = (isSubdir ? "../" : "./") + "tuf";
 
       // Comprehensive algorithmic topic icons & color mappings
       const TOPIC_REGISTRY = {

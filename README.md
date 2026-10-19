@@ -1,6 +1,6 @@
-# Daily Coding Challenge Redirects (LeetCode & GeeksforGeeks POTD)
+# Daily Coding Challenge Redirects (LeetCode, GFG & takeUforward TUF+)
 
-Lightning-fast, timezone-aware terminal redirect pages for both **LeetCode Problem of the Day** and **GeeksforGeeks Problem of the Day**.
+Lightning-fast, timezone-aware terminal redirect pages for **LeetCode Problem of the Day**, **GeeksforGeeks Problem of the Day**, and **takeUforward (TUF+) Problem of the Day**.
 
 ---
 
@@ -10,10 +10,12 @@ Lightning-fast, timezone-aware terminal redirect pages for both **LeetCode Probl
 | :--- | :--- | :--- |
 | **LeetCode POTD** | 👉 **[https://codesmith17.github.io/daily-potd-redirect/](https://codesmith17.github.io/daily-potd-redirect/)** | `00:00 UTC` (05:30 AM IST) |
 | **GeeksforGeeks POTD** | 👉 **[https://codesmith17.github.io/daily-potd-redirect/gfg](https://codesmith17.github.io/daily-potd-redirect/gfg)** | `00:00 IST` (18:30 UTC) |
+| **takeUforward (TUF+) POTD** | 👉 **[https://codesmith17.github.io/daily-potd-redirect/tuf](https://codesmith17.github.io/daily-potd-redirect/tuf)** | `00:00 IST` (18:30 UTC) |
 
 Clean subpaths are also available:
 - LeetCode: `/leetcode` or root `/`
-- GeeksforGeeks: `/gfg` or `/gfg.html`
+- GeeksforGeeks: `/gfg`
+- takeUforward (TUF+): `/tuf`
 
 Bookmark either link in your browser to immediately jump into today's problem!
 
@@ -35,13 +37,13 @@ The `data/` directory and HTML pages are synced automatically:
 1. **LeetCode POTD**:
    - Resets daily at **00:00:00 UTC** (05:30:00 AM IST).
    - Auto-sync triggers at `00:00 UTC`, `00:15 UTC`, and `00:30 UTC`.
-2. **GeeksforGeeks POTD**:
-   - Resets daily at **00:00:00 IST** (18:30:00 UTC).
+2. **GeeksforGeeks & takeUforward (TUF+) POTD**:
+   - Reset daily at **00:00:00 IST** (18:30:00 UTC).
    - Auto-sync triggers at `18:30 UTC` and `18:45 UTC`.
 3. **Continuous Hourly Fallback**:
    - Runs every hour (`cron: "0 * * * *"`) to ensure zero stale links even if GitHub's shared runner queues experience delays.
 4. **Client-Side Live Verification**:
-   - When opened in a browser, the frontend compares the bundled date against your local date/time and fetches fresh data (`data/leetcode.json?t=...` or live mirror) with cache-busting so you are never redirected to stale data.
+   - When opened in a browser, the frontend compares the bundled date against your local date/time and fetches fresh data (`data/leetcode.json`, `data/gfg.json`, or `data/tuf.json`) with cache-busting so you are never redirected to stale data.
 
 ---
 
@@ -57,19 +59,24 @@ daily-potd-redirect/
 ├── scripts/
 │   ├── main.go                         # Entrypoint, topic SVG icon registry & CLI runner
 │   ├── leetcode.go                     # LeetCode GraphQL & community mirror fetcher + compiler
-│   └── gfg.go                          # GeeksforGeeks Practice API fetcher + compiler
+│   ├── gfg.go                          # GeeksforGeeks Practice API fetcher + compiler
+│   └── tuf.go                          # takeUforward (TUF+) API fetcher + compiler
 ├── go.mod                              # Go module definition (stdlib only)
 ├── data/
 │   ├── leetcode.json                   # Standardized LeetCode POTD JSON
 │   ├── gfg.json                        # Standardized GeeksforGeeks POTD JSON
+│   ├── tuf.json                        # Standardized takeUforward POTD JSON
 │   └── daily.json                      # Backward-compatible alias
 ├── templates/
 │   ├── leetcode.html                   # LeetCode terminal template with SVG icons & difficulty glow
-│   └── gfg.html                        # GeeksforGeeks terminal template with SVG icons & difficulty glow
+│   ├── gfg.html                        # GeeksforGeeks terminal template with SVG icons & difficulty glow
+│   └── tuf.html                        # takeUforward terminal template with official brand styling
 ├── leetcode/
 │   └── index.html                      # Clean /leetcode path
 ├── gfg/
 │   └── index.html                      # Clean /gfg path
+├── tuf/
+│   └── index.html                      # Clean /tuf path
 ├── index.html                          # Root redirect (LeetCode POTD)
 ├── .gitignore
 └── README.md
@@ -79,7 +86,7 @@ daily-potd-redirect/
 
 ## 📊 Standardized Data Schema
 
-Both `data/leetcode.json` and `data/gfg.json` strictly adhere to the same schema:
+All platform JSON files (`data/leetcode.json`, `data/gfg.json`, `data/tuf.json`) strictly adhere to the same schema:
 
 ```json
 {

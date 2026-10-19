@@ -49,6 +49,9 @@ var topicRegistry = map[string]TopicStyle{
 	"hash":                {Color: "#fb7185", Icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>`},
 	"two pointers":        {Color: "#818cf8", Icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M2 12H22"/><path d="M6 16L2 12L6 8"/></svg>`},
 	"math":                {Color: "#facc15", Icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="12" x2="20" y2="12"/><line x1="12" y1="4" x2="12" y2="20"/></svg>`},
+	"bit manipulation":    {Color: "#38bdf8", Icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="M7 6l-4 6 4 6"/><path d="M17 6l4 6-4 6"/></svg>`},
+	"dsa":                 {Color: "#3b82f6", Icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`},
+	"tuf":                 {Color: "#327cf6", Icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>`},
 }
 
 func renderTagsHTML(tags []string) string {
@@ -112,6 +115,12 @@ func main() {
 	_, errGFG := syncGFG(client, rootDir, syncedAt)
 	if errGFG != nil {
 		fmt.Fprintf(os.Stderr, "[GFG Error]: %v\n", errGFG)
+	}
+
+	// 3. Sync takeUforward (TUF) POTD
+	_, errTUF := syncTUF(client, rootDir, syncedAt)
+	if errTUF != nil {
+		fmt.Fprintf(os.Stderr, "[TUF Error]: %v\n", errTUF)
 	}
 
 	fmt.Println("\n✓ Golang sync completed successfully.")
