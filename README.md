@@ -68,9 +68,7 @@ daily-potd-redirect/
 │   ├── tuf.json                        # Standardized takeUforward POTD JSON
 │   └── daily.json                      # Backward-compatible alias
 ├── templates/
-│   ├── leetcode.html                   # LeetCode terminal template with SVG icons & difficulty glow
-│   ├── gfg.html                        # GeeksforGeeks terminal template with SVG icons & difficulty glow
-│   └── tuf.html                        # takeUforward terminal template with official brand styling
+│   └── potd.html                       # Unified dynamic terminal template with auto-theme switching
 ├── leetcode/
 │   └── index.html                      # Clean /leetcode path
 ├── gfg/

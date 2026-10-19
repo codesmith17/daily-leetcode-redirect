@@ -3,11 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"html"
 	"io"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -105,38 +102,9 @@ func syncGFG(client *http.Client, rootDir, syncedAt string) (*POTDData, error) {
 	}
 	fmt.Println("[GFG] OK - Fetched directly from GeeksforGeeks Practice API.")
 
-	data.SyncedAt = syncedAt
-
-	dataDir := filepath.Join(rootDir, "data")
-	_ = os.MkdirAll(dataDir, 0755)
-
-	jsonData, _ := json.MarshalIndent(data, "", "  ")
-	_ = os.WriteFile(filepath.Join(dataDir, "gfg.json"), jsonData, 0644)
-
-	templatePath := filepath.Join(rootDir, "templates", "gfg.html")
-	templateBytes, err := os.ReadFile(templatePath)
-	if err != nil {
-		return nil, fmt.Errorf("read template %s: %w", templatePath, err)
+	if err := renderPage(data, "gfg", rootDir, syncedAt, false); err != nil {
+		return nil, fmt.Errorf("render GFG: %w", err)
 	}
-
-	tagsHTML := renderTagsHTML(data.Tags)
-	tagsJSON, _ := json.Marshal(data.Tags)
-
-	rendered := string(templateBytes)
-	rendered = strings.ReplaceAll(rendered, "__ID__", html.EscapeString(data.ID))
-	rendered = strings.ReplaceAll(rendered, "__TITLE__", html.EscapeString(data.Title))
-	rendered = strings.ReplaceAll(rendered, "__SLUG__", data.Slug)
-	rendered = strings.ReplaceAll(rendered, "__DIFFICULTY__", html.EscapeString(data.Difficulty))
-	rendered = strings.ReplaceAll(rendered, "__DIFFICULTY_CLASS__", data.DifficultyClass)
-	rendered = strings.ReplaceAll(rendered, "__URL__", data.URL)
-	rendered = strings.ReplaceAll(rendered, "__DATE__", data.Date)
-	rendered = strings.ReplaceAll(rendered, "__TAGS_HTML__", tagsHTML)
-	rendered = strings.ReplaceAll(rendered, "__TAGS_JSON__", string(tagsJSON))
-	rendered = strings.ReplaceAll(rendered, "__SYNCED_AT__", syncedAt)
-
-	gfgDir := filepath.Join(rootDir, "gfg")
-	_ = os.MkdirAll(gfgDir, 0755)
-	_ = os.WriteFile(filepath.Join(gfgDir, "index.html"), []byte(rendered), 0644)
 
 	fmt.Printf("[GFG] Synced: %s [%s] -> %s\n", data.Title, data.Difficulty, data.URL)
 	return data, nil

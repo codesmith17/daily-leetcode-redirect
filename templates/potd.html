@@ -1,34 +1,86 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-platform="__PLATFORM__" data-difficulty="__DIFFICULTY_CLASS__">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>__TITLE__ — takeUforward (TUF+) POTD</title>
+  <title>__TITLE__ — Daily POTD</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="robots" content="noindex">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+  <link rel="icon" id="favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <style>
+    /* Base Color Tokens */
     :root {
-      --bg: #070b14;
-      --surface: #0c1220;
-      --surface-elevated: #111a2e;
-      --surface-hover: #17243e;
-      --border: rgba(255, 255, 255, 0.08);
-      --border-accent: rgba(50, 124, 246, 0.45);
       --text: #f8fafc;
-      --text-dim: #93c5fd;
-      --muted: #4b5d78;
-      --accent: #327cf6;
-      --accent-secondary: #f59e0b;
-      --accent-glow: rgba(50, 124, 246, 0.28);
+      --text-dim: #94a3b8;
+      --muted: #475569;
       --easy: #10b981;
       --medium: #38bdf8;
       --hard: #f43f5e;
-      --info: #38bdf8;
-      --ambient-glow: rgba(50, 124, 246, 0.16);
+      --border: rgba(255, 255, 255, 0.08);
+      --diff-glow: transparent;
     }
+
+    /* LeetCode Dynamic Theme */
+    [data-platform="leetcode"] {
+      --bg: #070a0e;
+      --card-bg-start: rgba(14, 18, 26, 0.95);
+      --card-bg-end: rgba(8, 11, 16, 0.98);
+      --surface: #0e121a;
+      --surface-elevated: #161c28;
+      --surface-hover: #1e2636;
+      --accent: #ffa116;
+      --accent-secondary: #f0883e;
+      --accent-glow: rgba(255, 161, 22, 0.22);
+      --ambient-glow: rgba(255, 161, 22, 0.12);
+      --border-accent: rgba(255, 161, 22, 0.4);
+      --btn-gradient: linear-gradient(135deg, #ffa116, #ea580c);
+      --btn-hover: linear-gradient(135deg, #ffb23f, #f97316);
+      --btn-shadow: rgba(240, 136, 62, 0.35);
+    }
+
+    /* GeeksforGeeks Dynamic Theme */
+    [data-platform="gfg"] {
+      --bg: #060e09;
+      --card-bg-start: rgba(12, 24, 17, 0.95);
+      --card-bg-end: rgba(7, 16, 11, 0.98);
+      --surface: #0a160f;
+      --surface-elevated: #102217;
+      --surface-hover: #162e20;
+      --accent: #22c55e;
+      --accent-secondary: #16a34a;
+      --accent-glow: rgba(34, 197, 94, 0.22);
+      --ambient-glow: rgba(34, 197, 94, 0.12);
+      --border-accent: rgba(34, 197, 94, 0.4);
+      --btn-gradient: linear-gradient(135deg, #22c55e, #15803d);
+      --btn-hover: linear-gradient(135deg, #4ade80, #16a34a);
+      --btn-shadow: rgba(34, 197, 94, 0.35);
+    }
+
+    /* takeUforward (TUF+) Dynamic Theme */
+    [data-platform="tuf"] {
+      --bg: #070b14;
+      --card-bg-start: rgba(12, 18, 32, 0.95);
+      --card-bg-end: rgba(7, 11, 20, 0.98);
+      --surface: #0c1220;
+      --surface-elevated: #111a2e;
+      --surface-hover: #17243e;
+      --accent: #327cf6;
+      --accent-secondary: #f59e0b;
+      --accent-glow: rgba(50, 124, 246, 0.28);
+      --ambient-glow: rgba(50, 124, 246, 0.16);
+      --border-accent: rgba(50, 124, 246, 0.45);
+      --btn-gradient: linear-gradient(135deg, #2563eb, #1d4ed8);
+      --btn-hover: linear-gradient(135deg, #3b82f6, #2563eb);
+      --btn-shadow: rgba(37, 99, 235, 0.35);
+    }
+
+    /* Dynamic Difficulty Glow */
+    [data-difficulty="easy"] { --diff-glow: rgba(16, 185, 129, 0.18); }
+    [data-difficulty="medium"] { --diff-glow: rgba(56, 189, 248, 0.18); }
+    [data-difficulty="hard"] { --diff-glow: rgba(244, 63, 94, 0.18); }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
     body {
@@ -38,8 +90,8 @@
       background: var(--bg);
       background-image: 
         radial-gradient(ellipse at 50% 0%, var(--ambient-glow) 0%, transparent 65%),
-        radial-gradient(circle at 100% 100%, rgba(50, 124, 246, 0.06) 0%, transparent 40%),
-        linear-gradient(180deg, #070b14 0%, #090e1a 100%);
+        radial-gradient(circle at 100% 100%, var(--diff-glow) 0%, transparent 40%),
+        linear-gradient(180deg, var(--bg) 0%, #030712 100%);
       color: var(--text);
       font-family: ui-monospace, "JetBrains Mono", "Fira Code", "SFMono-Regular", Menlo, monospace;
       padding: 20px;
@@ -49,13 +101,13 @@
     .card {
       width: 100%;
       max-width: 550px;
-      background: linear-gradient(180deg, rgba(12, 18, 32, 0.95), rgba(7, 11, 20, 0.98));
+      background: linear-gradient(180deg, var(--card-bg-start), var(--card-bg-end));
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 26px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 50px var(--ambient-glow);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 50px var(--ambient-glow), 0 0 35px var(--diff-glow);
       position: relative;
       overflow: hidden;
       transition: box-shadow 0.3s ease, border-color 0.3s ease;
@@ -65,7 +117,7 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 2px;
-      background: linear-gradient(90deg, transparent 0%, var(--accent) 30%, var(--accent-secondary) 70%, transparent 100%);
+      background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
       opacity: 0.95;
     }
     .header-bar {
@@ -91,6 +143,7 @@
     .dot.red { background: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
     .dot.yellow { background: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.4); }
     .dot.green { background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+    
     .nav-switches {
       display: flex;
       gap: 6px;
@@ -112,14 +165,17 @@
     }
     .nav-switch:hover {
       color: #fff;
-      border-color: rgba(50, 124, 246, 0.5);
-      background: rgba(50, 124, 246, 0.1);
+      border-color: var(--accent);
+      background: var(--accent-glow);
     }
-    .nav-switch.active {
+    [data-platform="leetcode"] .nav-lc,
+    [data-platform="gfg"] .nav-gfg,
+    [data-platform="tuf"] .nav-tuf {
       color: #fff;
       border-color: var(--accent);
-      background: rgba(50, 124, 246, 0.18);
+      background: var(--accent-glow);
     }
+
     .brand-row {
       display: flex;
       align-items: center;
@@ -131,20 +187,20 @@
       align-items: center;
       gap: 10px;
     }
-    .brand-logo-wrap {
-      display: flex;
+    
+    /* Dynamic Brand Logos */
+    .platform-logo {
+      display: none;
       align-items: center;
       gap: 8px;
-    }
-    .brand-text-title {
       font-weight: 700;
       font-size: 15px;
-      letter-spacing: -0.02em;
       color: #fff;
     }
-    .brand-text-title span {
-      color: var(--accent);
-    }
+    [data-platform="leetcode"] .leetcode-logo { display: flex; }
+    [data-platform="gfg"] .gfg-logo { display: flex; }
+    [data-platform="tuf"] .tuf-logo { display: flex; }
+
     .brand-badge {
       font-size: 10px;
       font-weight: 700;
@@ -152,12 +208,13 @@
       letter-spacing: 0.08em;
       padding: 3px 8px;
       border-radius: 12px;
-      background: rgba(50, 124, 246, 0.15);
-      color: #60a5fa;
-      border: 1px solid rgba(50, 124, 246, 0.35);
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid var(--border-accent);
     }
+    
     .rewards-pill {
-      display: inline-flex;
+      display: none;
       align-items: center;
       gap: 5px;
       font-size: 11px;
@@ -169,6 +226,8 @@
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
     }
+    [data-platform="tuf"] .rewards-pill { display: inline-flex; }
+
     .title-section {
       margin-bottom: 16px;
     }
@@ -295,7 +354,7 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      background: var(--btn-gradient);
       color: #fff;
       font-family: inherit;
       font-size: 14px;
@@ -305,13 +364,13 @@
       border: none;
       cursor: pointer;
       text-decoration: none;
-      box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35);
+      box-shadow: 0 4px 18px var(--btn-shadow);
       transition: all 0.2s ease;
     }
     .btn-primary:hover {
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      background: var(--btn-hover);
       transform: translateY(-1px);
-      box-shadow: 0 6px 24px rgba(37, 99, 235, 0.5);
+      box-shadow: 0 6px 24px var(--btn-shadow);
     }
     .btn-secondary {
       display: flex;
@@ -378,15 +437,26 @@
         <span class="dot green"></span>
       </div>
       <div class="nav-switches">
-        <a href="../" class="nav-switch" id="nav-lc-btn">⚡ LeetCode</a>
-        <a href="../gfg" class="nav-switch" id="nav-gfg-btn">🌿 GFG</a>
-        <a href="../tuf" class="nav-switch active" id="nav-tuf-btn">🎯 TUF+</a>
+        <a href="../leetcode" class="nav-switch nav-lc" id="nav-lc-btn">⚡ LeetCode</a>
+        <a href="../gfg" class="nav-switch nav-gfg" id="nav-gfg-btn">🌿 GFG</a>
+        <a href="../tuf" class="nav-switch nav-tuf" id="nav-tuf-btn">🎯 TUF+</a>
       </div>
     </div>
 
     <div class="brand-row">
       <div class="brand">
-        <div class="brand-logo-wrap">
+        <!-- LeetCode Logo -->
+        <div class="platform-logo leetcode-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M16.102 17.93l-2.697 2.607c-.466.467-1.111.756-1.794.756s-1.328-.289-1.794-.756l-4.992-4.992a2.536 2.536 0 0 1 0-3.588l4.992-4.992c.466-.467 1.111-.756 1.794-.756s1.328.289 1.794.756l2.697 2.607a.846.846 0 0 0 1.196 0 .846.846 0 0 0 0-1.196l-2.697-2.607A4.225 4.225 0 0 0 11.611 4.5c-1.134 0-2.202.441-3 1.239l-4.992 4.992a4.237 4.237 0 0 0 0 5.986l4.992 4.992c.798.798 1.866 1.239 3 1.239s2.202-.441 3-1.239l2.697-2.607a.846.846 0 0 0 0-1.196.846.846 0 0 0-1.196 0z" fill="#FFA116"/><path d="M10.846 12.846h8.462a.846.846 0 0 0 0-1.692h-8.462a.846.846 0 0 0 0 1.692z" fill="#E7A41E"/></svg>
+          <span>LeetCode</span>
+        </div>
+        <!-- GFG Logo -->
+        <div class="platform-logo gfg-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5v-7l6 3.5-6 3.5z" fill="#22C55E"/><path d="M18 12c0-3.31-2.69-6-6-6S6 8.69 6 12s2.69 6 6 6" stroke="#22C55E" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>GeeksforGeeks</span>
+        </div>
+        <!-- TUF Logo -->
+        <div class="platform-logo tuf-logo">
           <svg width="130" height="22" viewBox="0 0 152 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="takeUforward">
             <path d="M148.386 5.17029L149.948 5.17139L149.947 18.1873L148.426 18.1883L148.406 16.6288C146.994 18.5625 144.999 18.7631 142.905 17.7959C139.046 15.2508 140.855 8.83757 145.692 9.45673C146.956 9.61858 147.618 10.1154 148.395 11.0762C148.327 9.22427 148.379 7.04851 148.386 5.17029ZM146.235 16.9207C147.908 16.4976 148.924 14.7982 148.507 13.1212C148.089 11.4441 146.394 10.4218 144.719 10.8354C143.036 11.2507 142.01 12.9555 142.429 14.6392C142.848 16.323 144.554 17.3454 146.235 16.9207Z" fill="#ffffff"></path>
             <path d="M45.7231 9.48384C47.5738 9.3688 48.3815 9.66307 49.5968 11.0487L49.5988 9.60296L51.148 9.60214C51.192 12.4247 51.1516 15.3561 51.1519 18.1876L49.6297 18.1875L49.6096 16.7142L49.3509 17.0105C48.4151 18.115 47.1724 18.4674 45.7765 18.3068C40.9156 17.7476 40.6624 10.2251 45.7231 9.48384ZM47.4391 16.9221C49.1158 16.5024 50.1358 14.8016 49.7179 13.1223C49.2999 11.443 47.6022 10.4205 45.9248 10.8378C44.2458 11.2555 43.2234 12.9576 43.6418 14.6386C44.0601 16.3195 45.7606 17.3422 47.4391 16.9221Z" fill="#ffffff"></path>
@@ -415,7 +485,7 @@
     </div>
 
     <div class="title-section">
-      <div class="problem-id">TUF Problem __ID__</div>
+      <div class="problem-id">Problem __ID__</div>
       <h1 class="problem-title" id="problem-title">__TITLE__</h1>
     </div>
 
@@ -428,7 +498,7 @@
       <div class="status-row">
         <span class="status-label">
           <span class="pulsing-dot"></span>
-          Redirecting to TUF
+          <span id="redirect-label">Redirecting</span>
         </span>
         <span class="status-value countdown" id="countdown-text">2.5s</span>
       </div>
@@ -436,8 +506,8 @@
         <div class="progress-bar" id="progress-bar"></div>
       </div>
       <div class="status-row" style="margin-top: 14px; font-size: 11px;">
-        <span class="status-label">TUF POTD Reset</span>
-        <span class="status-value" id="reset-in-text">12:00 AM IST</span>
+        <span class="status-label">Daily Reset</span>
+        <span class="status-value" id="reset-in-text">--</span>
       </div>
       <div class="status-row" style="font-size: 11px;">
         <span class="status-label">Local Date</span>
@@ -447,7 +517,7 @@
 
     <div class="action-group">
       <a href="__URL__" class="btn-primary" id="btn-redirect">
-        <span>Solve on takeUforward</span>
+        <span id="btn-cta-text">Open Challenge</span>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <line x1="7" y1="17" x2="17" y2="7"></line>
           <polyline points="7 7 17 7 17 17"></polyline>
@@ -459,7 +529,7 @@
     </div>
 
     <footer class="footer">
-      <span>takeUforward Striver's POTD</span>
+      <span>Synced: __SYNCED_AT__</span>
       <div class="kbd-hint">
         <kbd>Space</kbd> open &nbsp;•&nbsp; <kbd>C</kbd> pause
       </div>
@@ -469,7 +539,7 @@
   <script>
     (function() {
       const BUNDLED_POTD = {
-        platform: "tuf",
+        platform: "__PLATFORM__",
         id: "__ID__",
         title: "__TITLE__",
         slug: "__SLUG__",
@@ -480,6 +550,47 @@
         tags: __TAGS_JSON__,
         syncedAt: "__SYNCED_AT__"
       };
+
+      // Platform Configuration Dictionary
+      const PLATFORMS = {
+        leetcode: {
+          name: "LeetCode",
+          cta: "Solve on LeetCode",
+          resetHours: 0,
+          resetMins: 0,
+          resetLabel: "00:00 UTC (05:30 AM IST)",
+          emoji: "⚡"
+        },
+        gfg: {
+          name: "GeeksforGeeks",
+          cta: "Solve on GeeksforGeeks",
+          resetHours: 18,
+          resetMins: 30,
+          resetLabel: "12:00 AM IST (18:30 UTC)",
+          emoji: "🌿"
+        },
+        tuf: {
+          name: "takeUforward",
+          cta: "Solve on takeUforward",
+          resetHours: 18,
+          resetMins: 30,
+          resetLabel: "12:00 AM IST (18:30 UTC)",
+          emoji: "🎯"
+        }
+      };
+
+      const pConfig = PLATFORMS[BUNDLED_POTD.platform] || PLATFORMS.leetcode;
+
+      // Update dynamic DOM elements
+      const favicon = document.getElementById("favicon");
+      if (favicon && pConfig.emoji) {
+        favicon.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${pConfig.emoji}</text></svg>`;
+      }
+      document.title = `${BUNDLED_POTD.title} — ${pConfig.name} POTD`;
+      const btnCta = document.getElementById("btn-cta-text");
+      if (btnCta) btnCta.textContent = pConfig.cta;
+      const redirectLabel = document.getElementById("redirect-label");
+      if (redirectLabel) redirectLabel.textContent = `Redirecting to ${pConfig.name}`;
 
       // Dynamic subpath resolution
       const isSubdir = window.location.pathname.includes('/tuf') || window.location.pathname.includes('/leetcode') || window.location.pathname.includes('/gfg');
@@ -493,7 +604,7 @@
       if (navGfgBtn) navGfgBtn.href = isSubdir ? "../gfg" : "./gfg";
       if (navTufBtn) navTufBtn.href = isSubdir ? "../tuf" : "./tuf";
 
-      let targetUrl = BUNDLED_POTD.url || "https://takeuforward.org/potd";
+      let targetUrl = BUNDLED_POTD.url;
       let autoRedirectCancelled = false;
       const redirectBtn = document.getElementById("btn-redirect");
       const cancelBtn = document.getElementById("btn-cancel");
@@ -502,7 +613,7 @@
       const localDateEl = document.getElementById("local-date");
       const resetInEl = document.getElementById("reset-in-text");
 
-      // Compute local date & reset countdown (TUF resets at 00:00:00 IST / 18:30:00 UTC)
+      // Compute local date
       const now = new Date();
       if (localDateEl) {
         localDateEl.textContent = now.toLocaleDateString(undefined, {
@@ -512,9 +623,8 @@
 
       function updateResetCountdown() {
         const current = new Date();
-        // 18:30 UTC is 00:00 IST
         const nextReset = new Date(current);
-        nextReset.setUTCHours(18, 30, 0, 0);
+        nextReset.setUTCHours(pConfig.resetHours, pConfig.resetMins, 0, 0);
         if (current.getTime() >= nextReset.getTime()) {
           nextReset.setUTCDate(nextReset.getUTCDate() + 1);
         }
@@ -522,16 +632,16 @@
         const hrs = Math.floor(diffMs / 3600000);
         const mins = Math.floor((diffMs % 3600000) / 60000);
         if (resetInEl) {
-          resetInEl.textContent = `${hrs}h ${mins}m (12:00 AM IST)`;
+          resetInEl.textContent = `${hrs}h ${mins}m (${pConfig.resetLabel})`;
         }
       }
       updateResetCountdown();
       setInterval(updateResetCountdown, 30000);
 
-      // Verify bundled challenge against live data/tuf.json with cache-busting
+      // Verify bundled challenge against live data/<platform>.json with cache-busting
       async function verifyLivePOTD() {
         try {
-          const resp = await fetch(basePath + "tuf.json?t=" + Date.now());
+          const resp = await fetch(basePath + BUNDLED_POTD.platform + ".json?t=" + Date.now());
           if (resp.ok) {
             const data = await resp.json();
             if (data && data.url) {
@@ -542,7 +652,7 @@
             }
           }
         } catch (e) {
-          console.warn("Could not fetch live tuf.json, using bundled data.", e);
+          console.warn("Could not fetch live " + BUNDLED_POTD.platform + ".json", e);
         }
       }
       verifyLivePOTD();

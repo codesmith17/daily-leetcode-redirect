@@ -4,11 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"html"
 	"io"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -180,42 +177,9 @@ func syncLeetCode(client *http.Client, rootDir, syncedAt string) (*POTDData, err
 		fmt.Println("[LeetCode] OK - Fetched directly from LeetCode GraphQL.")
 	}
 
-	data.SyncedAt = syncedAt
-
-	dataDir := filepath.Join(rootDir, "data")
-	_ = os.MkdirAll(dataDir, 0755)
-
-	jsonData, _ := json.MarshalIndent(data, "", "  ")
-	_ = os.WriteFile(filepath.Join(dataDir, "leetcode.json"), jsonData, 0644)
-	_ = os.WriteFile(filepath.Join(dataDir, "daily.json"), jsonData, 0644)
-
-	templatePath := filepath.Join(rootDir, "templates", "leetcode.html")
-	templateBytes, err := os.ReadFile(templatePath)
-	if err != nil {
-		return nil, fmt.Errorf("read template %s: %w", templatePath, err)
+	if err := renderPage(data, "leetcode", rootDir, syncedAt, true); err != nil {
+		return nil, fmt.Errorf("render LeetCode: %w", err)
 	}
-
-	tagsHTML := renderTagsHTML(data.Tags)
-	tagsJSON, _ := json.Marshal(data.Tags)
-
-	rendered := string(templateBytes)
-	rendered = strings.ReplaceAll(rendered, "__ID__", html.EscapeString(data.ID))
-	rendered = strings.ReplaceAll(rendered, "__TITLE__", html.EscapeString(data.Title))
-	rendered = strings.ReplaceAll(rendered, "__SLUG__", data.Slug)
-	rendered = strings.ReplaceAll(rendered, "__DIFFICULTY__", html.EscapeString(data.Difficulty))
-	rendered = strings.ReplaceAll(rendered, "__DIFFICULTY_CLASS__", data.DifficultyClass)
-	rendered = strings.ReplaceAll(rendered, "__URL__", data.URL)
-	rendered = strings.ReplaceAll(rendered, "__DATE__", data.Date)
-	rendered = strings.ReplaceAll(rendered, "__TAGS_HTML__", tagsHTML)
-	rendered = strings.ReplaceAll(rendered, "__TAGS_JSON__", string(tagsJSON))
-	rendered = strings.ReplaceAll(rendered, "__SYNCED_AT__", syncedAt)
-
-	// Write root index.html and leetcode/index.html
-	_ = os.WriteFile(filepath.Join(rootDir, "index.html"), []byte(rendered), 0644)
-
-	leetcodeDir := filepath.Join(rootDir, "leetcode")
-	_ = os.MkdirAll(leetcodeDir, 0755)
-	_ = os.WriteFile(filepath.Join(leetcodeDir, "index.html"), []byte(rendered), 0644)
 
 	fmt.Printf("[LeetCode] Synced: %s. %s [%s] -> %s\n", data.ID, data.Title, data.Difficulty, data.URL)
 	return data, nil

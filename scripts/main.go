@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"html"
 	"net/http"
@@ -84,6 +85,51 @@ func newHTTPClient() *http.Client {
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		},
 	}
+}
+
+func renderPage(data *POTDData, platform, rootDir, syncedAt string, alsoWriteRoot bool) error {
+	data.SyncedAt = syncedAt
+
+	dataDir := filepath.Join(rootDir, "data")
+	_ = os.MkdirAll(dataDir, 0755)
+
+	jsonData, _ := json.MarshalIndent(data, "", "  ")
+	_ = os.WriteFile(filepath.Join(dataDir, fmt.Sprintf("%s.json", platform)), jsonData, 0644)
+	if alsoWriteRoot {
+		_ = os.WriteFile(filepath.Join(dataDir, "daily.json"), jsonData, 0644)
+	}
+
+	templatePath := filepath.Join(rootDir, "templates", "potd.html")
+	templateBytes, err := os.ReadFile(templatePath)
+	if err != nil {
+		return fmt.Errorf("read template %s: %w", templatePath, err)
+	}
+
+	tagsHTML := renderTagsHTML(data.Tags)
+	tagsJSON, _ := json.Marshal(data.Tags)
+
+	rendered := string(templateBytes)
+	rendered = strings.ReplaceAll(rendered, "__PLATFORM__", platform)
+	rendered = strings.ReplaceAll(rendered, "__ID__", html.EscapeString(data.ID))
+	rendered = strings.ReplaceAll(rendered, "__TITLE__", html.EscapeString(data.Title))
+	rendered = strings.ReplaceAll(rendered, "__SLUG__", data.Slug)
+	rendered = strings.ReplaceAll(rendered, "__DIFFICULTY__", html.EscapeString(data.Difficulty))
+	rendered = strings.ReplaceAll(rendered, "__DIFFICULTY_CLASS__", data.DifficultyClass)
+	rendered = strings.ReplaceAll(rendered, "__URL__", data.URL)
+	rendered = strings.ReplaceAll(rendered, "__DATE__", data.Date)
+	rendered = strings.ReplaceAll(rendered, "__TAGS_HTML__", tagsHTML)
+	rendered = strings.ReplaceAll(rendered, "__TAGS_JSON__", string(tagsJSON))
+	rendered = strings.ReplaceAll(rendered, "__SYNCED_AT__", syncedAt)
+
+	targetDir := filepath.Join(rootDir, platform)
+	_ = os.MkdirAll(targetDir, 0755)
+	_ = os.WriteFile(filepath.Join(targetDir, "index.html"), []byte(rendered), 0644)
+
+	if alsoWriteRoot {
+		_ = os.WriteFile(filepath.Join(rootDir, "index.html"), []byte(rendered), 0644)
+	}
+
+	return nil
 }
 
 // ----------------- ENTRYPOINT -----------------
