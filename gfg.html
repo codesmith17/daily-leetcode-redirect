@@ -11,19 +11,22 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
   <style>
     :root {
-      --bg: #0b130e;
-      --surface: #111e16;
-      --surface-hover: #17281e;
-      --border: #213929;
-      --text: #e6f4ea;
-      --muted: #83a58e;
-      --accent: #2e7d32;
-      --accent-bright: #4caf50;
-      --accent-glow: rgba(76, 175, 80, 0.2);
-      --easy: #4caf50;
-      --medium: #ff9800;
-      --hard: #f44336;
-      --info: #29b6f6;
+      --bg: #060e09;
+      --surface: #0a160f;
+      --surface-elevated: #102217;
+      --surface-hover: #162e20;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(76, 175, 80, 0.4);
+      --text: #f0fdf4;
+      --text-dim: #86efac;
+      --muted: #52795d;
+      --accent: #22c55e;
+      --accent-glow: rgba(34, 197, 94, 0.22);
+      --easy: #34d399;
+      --medium: #fbbf24;
+      --hard: #f87171;
+      --info: #38bdf8;
+      --ambient-glow: rgba(34, 197, 94, 0.12);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -32,71 +35,80 @@
       align-items: center;
       justify-content: center;
       background: var(--bg);
+      background-image: 
+        radial-gradient(ellipse at 50% 0%, var(--ambient-glow) 0%, transparent 65%),
+        radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.04) 0%, transparent 40%),
+        linear-gradient(180deg, #060e09 0%, #09140d 100%);
       color: var(--text);
-      font-family: ui-monospace, "JetBrains Mono", "Fira Code", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-family: ui-monospace, "JetBrains Mono", "Fira Code", "SFMono-Regular", Menlo, monospace;
       padding: 20px;
+      overflow-x: hidden;
+      transition: background 0.4s ease;
     }
     .card {
       width: 100%;
-      max-width: 530px;
-      background: var(--surface);
+      max-width: 550px;
+      background: linear-gradient(180deg, rgba(12, 24, 17, 0.94), rgba(7, 16, 11, 0.98));
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+      border-radius: 16px;
+      padding: 26px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 50px var(--ambient-glow);
       position: relative;
       overflow: hidden;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
     }
     .card::before {
       content: "";
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 2px;
-      background: linear-gradient(90deg, var(--accent-bright), var(--info));
+      background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+      opacity: 0.9;
     }
     .header-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
       border-bottom: 1px solid var(--border);
       font-size: 12px;
-      color: var(--muted);
     }
     .window-controls {
       display: flex;
-      gap: 6px;
+      gap: 7px;
     }
     .dot {
-      width: 10px;
-      height: 10px;
+      width: 11px;
+      height: 11px;
       border-radius: 50%;
-      background: #35533e;
+      transition: transform 0.15s ease;
     }
-    .dot.red { background: #ff5f56; }
-    .dot.yellow { background: #ffbd2e; }
-    .dot.green { background: #27c93f; }
-    .path {
-      letter-spacing: .04em;
-      color: var(--muted);
-    }
-    .path::before { content: "~/"; }
+    .dot:hover { transform: scale(1.15); }
+    .dot.red { background: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+    .dot.yellow { background: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.4); }
+    .dot.green { background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
     .nav-switch {
-      color: var(--accent-bright);
+      color: #94a3b8;
       text-decoration: none;
       font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 4px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
       border: 1px solid var(--border);
-      transition: all 0.15s ease;
+      background: rgba(255, 255, 255, 0.03);
+      transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
     }
     .nav-switch:hover {
-      background: var(--surface-hover);
-      border-color: var(--accent-bright);
+      color: #f97316;
+      background: rgba(249, 115, 22, 0.1);
+      border-color: rgba(249, 115, 22, 0.3);
+      transform: translateY(-1px);
     }
     .line {
       display: flex;
@@ -104,26 +116,29 @@
       gap: 10px;
       font-size: 13px;
       line-height: 1.6;
-      color: var(--muted);
-      margin-bottom: 6px;
+      color: #a7f3d0;
+      margin-bottom: 8px;
+      opacity: 0.85;
     }
     .prompt {
-      color: var(--accent-bright);
+      color: var(--accent);
       font-weight: 700;
     }
-    .problem-container {
-      margin: 16px 0 14px;
-      padding: 14px 16px;
+    .problem-box {
+      margin: 16px 0;
+      padding: 18px 20px;
       background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      position: relative;
     }
     .problem-title {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--text);
+      font-size: 19px;
+      font-weight: 800;
+      color: #ffffff;
       line-height: 1.4;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
       word-break: break-word;
     }
     .meta-row {
@@ -131,58 +146,122 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 8px;
-      font-size: 12px;
+      margin-bottom: 14px;
     }
     .pill {
       display: inline-flex;
       align-items: center;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      padding: 2px 8px;
+      gap: 6px;
+      padding: 3px 9px;
       border-radius: 6px;
-      border: 1px solid currentColor;
-    }
-    .pill.easy { color: var(--easy); background: rgba(76, 175, 80, 0.1); }
-    .pill.medium { color: var(--medium); background: rgba(255, 152, 0, 0.1); }
-    .pill.hard { color: var(--hard); background: rgba(244, 67, 54, 0.1); }
-    .pill.verified { color: var(--accent-bright); border-color: var(--accent-bright); background: rgba(76, 175, 80, 0.1); }
-    .pill.tag {
-      color: var(--muted);
-      border-color: var(--border);
-      font-size: 10px;
-      text-transform: none;
-      font-weight: normal;
-    }
-    .time-info {
       font-size: 11px;
-      color: var(--muted);
-      margin-top: 10px;
+      letter-spacing: 0.03em;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .pill.difficulty {
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+    }
+    .pill.difficulty::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 6px currentColor;
+      animation: pulse-dot 2s infinite ease-in-out;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.75); }
+    }
+    .pill.difficulty.easy, .pill.difficulty.basic, .pill.difficulty.school {
+      color: #34d399;
+      border: 1px solid #34d399;
+      background: rgba(52, 211, 153, 0.12);
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.2);
+    }
+    .pill.difficulty.medium {
+      color: #fbbf24;
+      border: 1px solid #fbbf24;
+      background: rgba(251, 191, 36, 0.12);
+      box-shadow: 0 0 14px rgba(251, 191, 36, 0.2);
+    }
+    .pill.difficulty.hard {
+      color: #f87171;
+      border: 1px solid #f87171;
+      background: rgba(248, 113, 113, 0.14);
+      box-shadow: 0 0 16px rgba(248, 113, 113, 0.25);
+    }
+    .pill.verified {
+      color: var(--accent);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      background: rgba(34, 197, 94, 0.08);
+      font-size: 10px;
+    }
+    .pill.date {
+      color: #a7f3d0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .pill.topic-tag {
+      color: var(--tag-color, #a7f3d0);
+      border: 1px solid color-mix(in srgb, var(--tag-color, #a7f3d0) 30%, transparent);
+      background: color-mix(in srgb, var(--tag-color, #a7f3d0) 10%, transparent);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    .pill.topic-tag:hover {
+      transform: translateY(-1px);
+      border-color: var(--tag-color, #a7f3d0);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--tag-color, #a7f3d0) 35%, transparent);
+    }
+    .pill.topic-tag svg {
+      flex-shrink: 0;
+      stroke: currentColor;
+    }
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+    }
+    .telemetry-item {
       display: flex;
       flex-direction: column;
       gap: 3px;
-      border-top: 1px dashed var(--border);
-      padding-top: 8px;
     }
-    .time-item {
-      display: flex;
-      justify-content: space-between;
+    .telemetry-label {
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
-    .time-label { color: var(--muted); }
-    .time-value { color: var(--text); }
+    .telemetry-value {
+      color: #e2e8f0;
+      font-weight: 600;
+    }
     .progress-bar-container {
-      margin-top: 16px;
+      margin-top: 18px;
       height: 4px;
-      background: var(--border);
-      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 99px;
       overflow: hidden;
+      position: relative;
     }
     .progress-bar {
       height: 100%;
       width: 0%;
-      background: var(--accent-bright);
-      transition: width 0.1s linear;
+      background: linear-gradient(90deg, var(--accent), #38bdf8);
+      border-radius: 99px;
+      transition: width 0.08s linear;
+      box-shadow: 0 0 10px var(--accent);
     }
     .action-row {
       display: flex;
@@ -196,61 +275,89 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 9px 16px;
-      border-radius: 6px;
+      padding: 10px 18px;
+      border-radius: 8px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       text-decoration: none;
-      transition: all 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       font-family: inherit;
     }
     .btn-primary {
-      background: var(--accent-bright);
-      color: #08110b;
-      border: 1px solid var(--accent-bright);
+      background: var(--accent);
+      color: #05140b;
+      border: 1px solid var(--accent);
+      box-shadow: 0 4px 14px var(--accent-glow);
     }
     .btn-primary:hover {
-      background: #66bb6a;
-      box-shadow: 0 0 12px var(--accent-glow);
+      background: #4ade80;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(34, 197, 94, 0.35);
     }
     .btn-secondary {
-      background: transparent;
-      color: var(--muted);
+      background: rgba(255, 255, 255, 0.03);
+      color: #94a3b8;
       border: 1px solid var(--border);
     }
     .btn-secondary:hover {
-      color: var(--text);
-      border-color: var(--muted);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
       background: var(--surface-hover);
+    }
+    .btn-copy {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid transparent;
+      padding: 10px 12px;
+    }
+    .btn-copy:hover {
+      color: #e2e8f0;
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.03);
     }
     .cursor {
       display: inline-block;
       width: 8px;
       height: 14px;
-      background: var(--accent-bright);
-      margin-left: 2px;
+      background: var(--accent);
+      margin-left: 3px;
       vertical-align: middle;
       animation: blink 1s steps(1) infinite;
     }
     @keyframes blink { 50% { opacity: 0; } }
     .footer {
-      margin-top: 18px;
-      padding-top: 12px;
+      margin-top: 20px;
+      padding-top: 14px;
       border-top: 1px solid var(--border);
       color: var(--muted);
       font-size: 11px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
+      gap: 8px;
+    }
+    .shortcuts-hint {
+      display: flex;
+      align-items: center;
       gap: 6px;
+      font-size: 10px;
+      color: #52795d;
     }
-    .footer a {
-      color: var(--muted);
-      text-decoration: none;
+    kbd {
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      font-family: inherit;
     }
-    .footer a:hover {
-      color: var(--accent-bright);
+    @media (max-width: 520px) {
+      .telemetry-grid { grid-template-columns: 1fr; }
+      .action-row { flex-wrap: wrap; }
+      .btn { width: 100%; }
+      .btn-copy { width: 100%; text-align: center; }
     }
   </style>
 </head>
@@ -259,17 +366,16 @@
     <meta http-equiv="refresh" content="0; url=https://www.geeksforgeeks.org/problems/good-stones--170647/1">
   </noscript>
 
-  <main class="card">
+  <main class="card" id="main-card">
     <div class="header-bar">
       <div class="window-controls">
         <span class="dot red"></span>
         <span class="dot yellow"></span>
         <span class="dot green"></span>
       </div>
-      <div class="path">gfg-potd %</div>
-      <div style="display: flex; gap: 8px; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 8px;">
         <span id="badge-status" class="pill verified">live check</span>
-        <a href="index.html" class="nav-switch">⚡ LeetCode &rarr;</a>
+        <a href="index.html" class="nav-switch">⚡ Switch to LeetCode &rarr;</a>
       </div>
     </div>
 
@@ -278,29 +384,29 @@
       <span>fetch --potd gfg --tz local</span>
     </div>
 
-    <div class="problem-container">
+    <div class="problem-box">
       <div class="problem-title" id="problem-title">Count Indices That Escape Array</div>
       <div class="meta-row" id="tags-row">
-        <span id="problem-difficulty" class="pill medium">Medium</span>
-        <span id="problem-date" class="status">2026-10-19</span>
-        <span class="pill tag">Greedy</span><span class="pill tag">Dynamic Programming</span><span class="pill tag">Graph</span>
+        <span id="problem-difficulty" class="pill difficulty medium">Medium</span>
+        <span id="problem-date" class="pill date">2026-10-19</span>
+        <span class="pill topic-tag" style="--tag-color:#e879f9"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9l4-6z"/><path d="M2 9h20"/></svg><span>Greedy</span></span><span class="pill topic-tag" style="--tag-color:#c084fc"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/><path d="M15 21V9"/></svg><span>Dynamic Programming</span></span><span class="pill topic-tag" style="--tag-color:#f472b6"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="8" r="3"/><circle cx="12" cy="18" r="3"/><line x1="8.5" y1="7" x2="15.5" y2="7.5"/><line x1="7.5" y1="8.5" x2="10.5" y2="15.5"/><line x1="16.5" y1="10" x2="13.5" y2="16"/></svg><span>Graph</span></span><span class="pill topic-tag" style="--tag-color:#38bdf8"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18"/><path d="M18 15l-6 6-6-6"/></svg><span>DFS</span></span>
       </div>
 
-      <div class="time-info">
-        <div class="time-item">
-          <span class="time-label">Local Browser Time:</span>
-          <span class="time-value" id="local-time-display">--</span>
+      <div class="telemetry-grid">
+        <div class="telemetry-item">
+          <span class="telemetry-label">Browser Local Time</span>
+          <span class="telemetry-value" id="local-time-display">--</span>
         </div>
-        <div class="time-item">
-          <span class="time-label">Next GFG Reset (00:00 IST):</span>
-          <span class="time-value" id="reset-countdown">--</span>
+        <div class="telemetry-item">
+          <span class="telemetry-label">Reset in (12:00 AM IST)</span>
+          <span class="telemetry-value" id="reset-countdown">--</span>
         </div>
       </div>
     </div>
 
     <div class="line">
       <span class="prompt">&gt;</span>
-      <span id="redirect-status">Verifying daily question...</span>
+      <span id="redirect-status">Verifying daily challenge...</span>
       <span class="cursor" aria-hidden="true"></span>
     </div>
 
@@ -310,18 +416,21 @@
 
     <div class="action-row">
       <a class="btn btn-primary" id="open-link" href="https://www.geeksforgeeks.org/problems/good-stones--170647/1">Open GFG Problem &rarr;</a>
-      <button class="btn btn-secondary" id="pause-btn">Pause</button>
+      <button class="btn btn-secondary" id="pause-btn">Pause [Space]</button>
+      <button class="btn btn-copy" id="copy-btn" title="Copy problem URL">Copy Link [C]</button>
     </div>
 
     <div class="footer">
-      <span>Auto-redirects based on browser time</span>
-      <span>Last sync: 2026-10-19 05:40 UTC</span>
+      <div class="shortcuts-hint">
+        <kbd>Space</kbd> pause &bull; <kbd>Enter</kbd> open &bull; <kbd>C</kbd> copy
+      </div>
+      <span>Synced: 2026-10-19 05:53 UTC</span>
     </div>
   </main>
 
   <script>
     (function() {
-      // Bundled fallback data generated during build
+      // Bundled fallback data
       const bundled = {
         platform: "gfg",
         id: "2210",
@@ -331,42 +440,76 @@
         difficultyClass: "medium",
         url: "https://www.geeksforgeeks.org/problems/good-stones--170647/1",
         date: "2026-10-19",
-        syncedAt: "2026-10-19 05:40 UTC"
+        tags: ["Greedy", "Dynamic Programming", "Graph", "DFS"],
+        syncedAt: "2026-10-19 05:53 UTC"
       };
+
+      // Comprehensive algorithmic topic icons & color mappings
+      const TOPIC_REGISTRY = {
+        "dynamic programming": { color: "#c084fc", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/><path d="M15 21V9"/></svg>' },
+        "dp": { color: "#c084fc", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/><path d="M15 21V9"/></svg>' },
+        "stack": { color: "#38bdf8", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>' },
+        "queue": { color: "#2dd4bf", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/><circle cx="5" cy="12" r="2"/></svg>' },
+        "graph": { color: "#f472b6", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="8" r="3"/><circle cx="12" cy="18" r="3"/><line x1="8.5" y1="7" x2="15.5" y2="7.5"/><line x1="7.5" y1="8.5" x2="10.5" y2="15.5"/><line x1="16.5" y1="10" x2="13.5" y2="16"/></svg>' },
+        "tree": { color: "#4ade80", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><circle cx="6" cy="19" r="3"/><circle cx="18" cy="19" r="3"/><path d="M12 8v4"/><path d="M12 12l-4 4"/><path d="M12 12l4 4"/></svg>' },
+        "binary tree": { color: "#4ade80", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><circle cx="6" cy="19" r="3"/><circle cx="18" cy="19" r="3"/><path d="M12 8v4"/><path d="M12 12l-4 4"/><path d="M12 12l4 4"/></svg>' },
+        "array": { color: "#60a5fa", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="8" y1="6" x2="8" y2="18"/><line x1="14" y1="6" x2="14" y2="18"/><line x1="20" y1="6" x2="20" y2="18"/></svg>' },
+        "sorting": { color: "#a78bfa", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
+        "greedy": { color: "#e879f9", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9l4-6z"/><path d="M2 9h20"/></svg>' },
+        "binary search": { color: "#34d399", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' },
+        "dfs": { color: "#38bdf8", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18"/><path d="M18 15l-6 6-6-6"/></svg>' },
+        "bfs": { color: "#38bdf8", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 0 0 0 18"/><path d="M12 7a5 5 0 0 0 0 10"/><path d="M12 11a1 1 0 0 0 0 2"/></svg>' },
+        "string": { color: "#fbbf24", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>' },
+        "hash table": { color: "#fb7185", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>' },
+        "two pointers": { color: "#818cf8", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M2 12H22"/><path d="M6 16L2 12L6 8"/></svg>' },
+        "math": { color: "#facc15", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="12" x2="20" y2="12"/><line x1="12" y1="4" x2="12" y2="20"/></svg>' }
+      };
+
+      function getTagMarkup(tagName) {
+        const lower = tagName.toLowerCase();
+        let match = { color: "#a7f3d0", icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>' };
+        for (const [key, val] of Object.entries(TOPIC_REGISTRY)) {
+          if (lower.includes(key)) {
+            match = val;
+            break;
+          }
+        }
+        return `<span class="pill topic-tag" style="--tag-color:${match.color}">${match.icon}<span>${tagName}</span></span>`;
+      }
 
       let targetUrl = bundled.url || "https://www.geeksforgeeks.org/problem-of-the-day";
       let isPaused = false;
       let progressInterval = null;
-      const REDIRECT_DURATION = 1400; // ms to let user see problem and allow pause
+      const REDIRECT_DURATION = 1500;
       let startTime = null;
 
-      // DOM elements
+      const cardEl = document.getElementById("main-card");
       const titleEl = document.getElementById("problem-title");
       const diffEl = document.getElementById("problem-difficulty");
       const dateEl = document.getElementById("problem-date");
+      const tagsRow = document.getElementById("tags-row");
       const statusEl = document.getElementById("redirect-status");
       const openLinkEl = document.getElementById("open-link");
       const pauseBtn = document.getElementById("pause-btn");
+      const copyBtn = document.getElementById("copy-btn");
       const progressBar = document.getElementById("progress-bar");
       const badgeStatus = document.getElementById("badge-status");
       const localTimeEl = document.getElementById("local-time-display");
       const resetCountdownEl = document.getElementById("reset-countdown");
 
-      // Display user local time & countdown to 00:00 IST (Indian Standard Time)
       function updateClock() {
         const now = new Date();
         try {
           const options = {
-            year: "numeric", month: "short", day: "numeric",
             hour: "2-digit", minute: "2-digit", second: "2-digit",
             timeZoneName: "short"
           };
           localTimeEl.textContent = new Intl.DateTimeFormat(undefined, options).format(now);
         } catch (e) {
-          localTimeEl.textContent = now.toLocaleString();
+          localTimeEl.textContent = now.toLocaleTimeString();
         }
 
-        // GFG resets at midnight Indian Standard Time (UTC+5:30)
+        // GFG resets at midnight Indian Standard Time (12:00 AM IST)
         const nowUtcMs = now.getTime();
         const istOffsetMs = 5.5 * 60 * 60 * 1000;
         const istTime = new Date(nowUtcMs + istOffsetMs);
@@ -378,10 +521,10 @@
           0, 0, 0, 0
         ));
         const diffMs = nextIstMidnight.getTime() - istTime.getTime();
-        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-        const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-        const diffSecs = Math.floor((diffMs % (1000 * 60)) / 1000);
-        resetCountdownEl.textContent = `${diffHours}h ${diffMins}m ${diffSecs}s`;
+        const h = Math.floor(diffMs / 3600000);
+        const m = Math.floor((diffMs % 3600000) / 60000);
+        const s = Math.floor((diffMs % 60000) / 1000);
+        resetCountdownEl.textContent = `${h}h ${m}m ${s}s`;
       }
 
       updateClock();
@@ -394,12 +537,28 @@
         document.title = `${data.title} — GeeksforGeeks POTD`;
 
         const diff = (data.difficulty || "Medium").toUpperCase();
+        const diffClass = diff.toLowerCase();
         diffEl.textContent = diff;
-        diffEl.className = `pill ${diff.toLowerCase()}`;
+        diffEl.className = `pill difficulty ${diffClass}`;
+
+        // Dynamic ambient backlight
+        if (diffClass === "easy" || diffClass === "basic") {
+          document.documentElement.style.setProperty("--ambient-glow", "rgba(52, 211, 153, 0.16)");
+        } else if (diffClass === "hard") {
+          document.documentElement.style.setProperty("--ambient-glow", "rgba(248, 113, 113, 0.2)");
+        } else {
+          document.documentElement.style.setProperty("--ambient-glow", "rgba(251, 191, 36, 0.16)");
+        }
 
         if (data.date) {
           dateEl.textContent = data.date.slice(0, 10);
         }
+
+        if (Array.isArray(data.tags) && data.tags.length > 0) {
+          const tagsHtml = data.tags.slice(0, 4).map(t => getTagMarkup(typeof t === "string" ? t : t.name)).join("");
+          tagsRow.innerHTML = `<span id="problem-difficulty" class="pill difficulty ${diffClass}">${diff}</span><span id="problem-date" class="pill date">${data.date ? data.date.slice(0, 10) : ""}</span>${tagsHtml}`;
+        }
+
         openLinkEl.href = targetUrl;
         if (sourceLabel) badgeStatus.textContent = sourceLabel;
       }
@@ -422,15 +581,36 @@
         }, 30);
       }
 
-      pauseBtn.addEventListener("click", () => {
+      function togglePause() {
         isPaused = !isPaused;
         if (isPaused) {
-          pauseBtn.textContent = "Resume";
+          pauseBtn.textContent = "Resume [Space]";
           statusEl.textContent = "Redirect paused";
           if (progressInterval) clearInterval(progressInterval);
         } else {
-          pauseBtn.textContent = "Pause";
+          pauseBtn.textContent = "Pause [Space]";
           startRedirect();
+        }
+      }
+
+      pauseBtn.addEventListener("click", togglePause);
+
+      copyBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(targetUrl).then(() => {
+          copyBtn.textContent = "Copied! ✓";
+          setTimeout(() => copyBtn.textContent = "Copy Link [C]", 1500);
+        });
+      });
+
+      // Keyboard shortcuts
+      window.addEventListener("keydown", (e) => {
+        if (e.code === "Space") {
+          e.preventDefault();
+          togglePause();
+        } else if (e.code === "Enter") {
+          window.location.replace(targetUrl);
+        } else if (e.key === "c" || e.key === "C") {
+          copyBtn.click();
         }
       });
 
