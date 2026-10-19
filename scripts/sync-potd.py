@@ -53,6 +53,39 @@ query questionOfToday {
 }
 """
 
+TOPIC_ICONS = {
+    "dynamic programming": ("#c084fc", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/><path d="M15 21V9"/></svg>'),
+    "dp": ("#c084fc", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/><path d="M15 21V9"/></svg>'),
+    "stack": ("#38bdf8", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>'),
+    "queue": ("#2dd4bf", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/><circle cx="5" cy="12" r="2"/></svg>'),
+    "graph": ("#f472b6", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="8" r="3"/><circle cx="12" cy="18" r="3"/><line x1="8.5" y1="7" x2="15.5" y2="7.5"/><line x1="7.5" y1="8.5" x2="10.5" y2="15.5"/><line x1="16.5" y1="10" x2="13.5" y2="16"/></svg>'),
+    "tree": ("#4ade80", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><circle cx="6" cy="19" r="3"/><circle cx="18" cy="19" r="3"/><path d="M12 8v4"/><path d="M12 12l-4 4"/><path d="M12 12l4 4"/></svg>'),
+    "array": ("#60a5fa", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="8" y1="6" x2="8" y2="18"/><line x1="14" y1="6" x2="14" y2="18"/><line x1="20" y1="6" x2="20" y2="18"/></svg>'),
+    "sorting": ("#a78bfa", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>'),
+    "greedy": ("#e879f9", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9l4-6z"/><path d="M2 9h20"/></svg>'),
+    "binary search": ("#34d399", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'),
+    "dfs": ("#38bdf8", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18"/><path d="M18 15l-6 6-6-6"/></svg>'),
+    "bfs": ("#38bdf8", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 0 0 0 18"/><path d="M12 7a5 5 0 0 0 0 10"/><path d="M12 11a1 1 0 0 0 0 2"/></svg>'),
+    "string": ("#fbbf24", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>'),
+    "hash": ("#fb7185", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>'),
+    "two pointers": ("#818cf8", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M2 12H22"/><path d="M6 16L2 12L6 8"/></svg>'),
+    "math": ("#facc15", '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="12" x2="20" y2="12"/><line x1="12" y1="4" x2="12" y2="20"/></svg>')
+}
+
+def render_tags_html(tags):
+    html_out = []
+    for tag in tags[:4]:
+        name = tag if isinstance(tag, str) else tag.get("name", "")
+        t_lower = name.lower()
+        color = "#94a3b8"
+        icon = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>'
+        for k, v in TOPIC_ICONS.items():
+            if k in t_lower:
+                color, icon = v
+                break
+        html_out.append(f'<span class="pill topic-tag" style="--tag-color:{color}">{icon}<span>{html.escape(name)}</span></span>')
+    return "".join(html_out)
+
 def create_ssl_context():
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
@@ -137,14 +170,12 @@ def sync_leetcode(synced_at):
     data["syncedAt"] = synced_at
     os.makedirs(DATA_DIR, exist_ok=True)
 
-    # Save data/leetcode.json and alias data/daily.json
     with open(DATA_LEETCODE_JSON, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
     with open(DATA_DAILY_JSON, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
     print(f"[LeetCode] Saved {DATA_LEETCODE_JSON}")
 
-    # Render template
     if not os.path.exists(TEMPLATE_LEETCODE):
         print(f"[LeetCode] Error: Template not found at {TEMPLATE_LEETCODE}", file=sys.stderr)
         return
@@ -152,7 +183,8 @@ def sync_leetcode(synced_at):
     with open(TEMPLATE_LEETCODE, "r", encoding="utf-8") as f:
         template = f.read()
 
-    tags_html = "".join([f'<span class="pill tag">{html.escape(t)}</span>' for t in data.get("tags", [])[:3]])
+    tags_html = render_tags_html(data.get("tags", []))
+    tags_json = json.dumps(data.get("tags", []))
 
     rendered = (
         template
@@ -164,6 +196,7 @@ def sync_leetcode(synced_at):
         .replace("__URL__", data["url"])
         .replace("__DATE__", data["date"])
         .replace("__TAGS_HTML__", tags_html)
+        .replace("__TAGS_JSON__", tags_json)
         .replace("__SYNCED_AT__", synced_at)
     )
 
@@ -240,7 +273,8 @@ def sync_gfg(synced_at):
     with open(TEMPLATE_GFG, "r", encoding="utf-8") as f:
         template = f.read()
 
-    tags_html = "".join([f'<span class="pill tag">{html.escape(t)}</span>' for t in data.get("tags", [])[:3]])
+    tags_html = render_tags_html(data.get("tags", []))
+    tags_json = json.dumps(data.get("tags", []))
 
     rendered = (
         template
@@ -252,6 +286,7 @@ def sync_gfg(synced_at):
         .replace("__URL__", data["url"])
         .replace("__DATE__", data["date"])
         .replace("__TAGS_HTML__", tags_html)
+        .replace("__TAGS_JSON__", tags_json)
         .replace("__SYNCED_AT__", synced_at)
     )
 
