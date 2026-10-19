@@ -1,11 +1,15 @@
-name: Sync Daily LeetCode Redirect
+name: Sync Daily LeetCode & GFG Redirect
 
 on:
   schedule:
-    # Run at midnight UTC, with catch-up runs and hourly fallback
+    # 18:30 UTC = 00:00 IST (GeeksforGeeks POTD reset)
+    - cron: "30 18 * * *"
+    - cron: "45 18 * * *"
+    # 00:00 UTC = 05:30 IST (LeetCode POTD reset)
     - cron: "0 0 * * *"
     - cron: "15 0 * * *"
     - cron: "30 0 * * *"
+    # Hourly fallback sync
     - cron: "0 * * * *"
   workflow_dispatch: {}
   push:
@@ -30,18 +34,17 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Fetch today's challenge and rebuild index.html
+      - name: Fetch challenges and rebuild pages
         run: python scripts/sync-daily-challenge.py
 
       - name: Commit and push if files changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html data/daily.json
+          git add index.html gfg.html gfg/index.html data/daily.json data/gfg.json
           if git diff --cached --quiet; then
             echo "Already up to date, nothing to commit."
           else
-            git commit -m "chore: sync daily challenge ($(date -u +%F))"
+            git commit -m "chore: sync daily challenges ($(date -u +%F))"
             git push
           fi
-

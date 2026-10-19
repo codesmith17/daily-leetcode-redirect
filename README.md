@@ -1,38 +1,46 @@
-# LeetCode POTD — Daily Challenge Redirect
+# Daily Coding Challenge Redirects (LeetCode + GeeksforGeeks POTD)
 
-A lightning-fast, timezone-aware terminal redirect page for the **LeetCode Problem of the Day (POTD)**.
-
-Inspired by [Alberto Minetti's daily-leetcode-redirect](https://github.com/albertominetti/daily-leetcode-redirect), but rebuilt from the ground up to solve the critical staleness and timezone delay bugs that plague static redirect pages.
+Lightning-fast, timezone-aware terminal redirect pages for both **LeetCode Problem of the Day** and **GeeksforGeeks Problem of the Day**.
 
 ---
 
-## ⚡ Why Did the Original Repo Open the Wrong Link?
+## 🌐 Live URLs
 
-If you opened Alberto Minetti's redirect link a few hours ago, you were redirected to **yesterday's** problem. Here is why:
+| Platform | Live Redirect URL | Reset Time |
+| :--- | :--- | :--- |
+| **LeetCode POTD** | 👉 **[https://codesmith17.github.io/daily-leetcode-redirect/](https://codesmith17.github.io/daily-leetcode-redirect/)** | `00:00 UTC` (05:30 AM IST) |
+| **GeeksforGeeks POTD** | 👉 **[https://codesmith17.github.io/daily-leetcode-redirect/gfg](https://codesmith17.github.io/daily-leetcode-redirect/gfg)** | `00:00 IST` (18:30 UTC) |
+
+Bookmark either link in your browser to immediately jump into today's problem!
+
+---
+
+## ⚡ Why Other Static Redirects Open the Wrong Link
 
 1. **GitHub Actions Schedule Delays**:
-   - The original repo relies solely on a single GitHub Actions cron job scheduled at `00:05 UTC`.
-   - On GitHub's free runners, scheduled workflows are placed on a shared queue and are frequently delayed by **3 to 5 hours** during peak times.
-   - For example, on Oct 19, 2026, the original repo's commit was delayed until **04:29 UTC** (09:59 AM IST). Anyone visiting between midnight UTC and 10:00 AM IST was redirected to the previous day's problem.
-2. **Hardcoded Static Redirect**:
-   - The original page had static `<meta http-equiv="refresh">` and `<script>window.location.replace</script>` baked into the HTML. If the GitHub Actions runner was delayed, the page blindly redirected to the stale question.
-3. **Aggressive CDN & Browser Caching**:
-   - GitHub Pages CDN and web browsers aggressively cache static `index.html` files unless dynamic cache-busting or live API validation is performed.
-4. **Timezone Misalignment**:
-   - LeetCode's daily question officially resets at **00:00:00 UTC** (05:30 AM IST). Users in timezones ahead of UTC were getting stale links due to the delayed cron.
+   - Single-schedule cron jobs on GitHub's free runners are placed on a shared public queue and frequently delayed by **3 to 5 hours** during peak traffic.
+2. **Hardcoded Static Redirects**:
+   - Other redirect sites bake static `<meta http-equiv="refresh">` and `<script>window.location.replace</script>` into the HTML without client-side date checks. If the cron was delayed, visitors were redirected to yesterday's problem.
+3. **Timezone Misalignment**:
+   - LeetCode resets at **00:00 UTC**, while GeeksforGeeks resets at **00:00 IST**.
+   - These pages detect your **local browser time**, track time remaining until reset for each platform, and dynamically verify the challenge before redirecting.
 
 ---
 
-## 🚀 How This Project Solves It
+## 🚀 Key Features
 
-| Feature | Original Repo | This Project |
-| :--- | :--- | :--- |
-| **Architecture** | Purely static HTML | **Hybrid**: Fast pre-rendered HTML + client-side live validation |
-| **Cron Reliability** | 1 daily run at 00:05 UTC (often delayed 4+ hrs) | Runs at 00:00, 00:15, 00:30 UTC, plus hourly fallbacks |
-| **Stale Cache Protection** | ❌ None (blind redirect) | ✅ **Detects stale data in browser** & fetches fresh POTD before redirecting |
-| **Local Time Awareness** | ❌ No awareness | ✅ **Displays visitor's local time** & countdown to 00:00 UTC reset |
-| **User Controls** | ❌ Hard immediate redirect | ✅ Animated progress bar, Pause/Resume, & instant problem link |
-| **Zero External UI Dependencies** | ✅ Pure CSS/JS | ✅ Pure CSS/JS (terminal aesthetic, responsive dark mode) |
+- **Dual Platform Support**: Both LeetCode and GeeksforGeeks POTD in one repository.
+- **Timezone & Reset Aware**:
+  - LeetCode page tracks countdown to `00:00 UTC`.
+  - GeeksforGeeks page tracks countdown to `00:00 IST`.
+- **Hybrid Verification**:
+  - Instant page load using pre-rendered fallback.
+  - Client-side live verification with cache-busting to ensure fresh links.
+- **Interactive Controls**:
+  - Animated progress bar before redirecting.
+  - **Pause / Resume** button to examine the problem title, difficulty, and tags.
+  - One-click navigation switcher between LeetCode and GeeksforGeeks.
+- **Zero External UI Dependencies**: Pure CSS/JS with a terminal dark-mode theme.
 
 ---
 
@@ -42,31 +50,17 @@ If you opened Alberto Minetti's redirect link a few hours ago, you were redirect
 daily-leetcode-redirect/
 ├── .github/
 │   └── workflows/
-│       └── update-daily-challenge.yml   # Multi-schedule sync workflow
+│       └── update-daily-challenge.yml   # Auto-sync at 00:00 IST & 00:00 UTC
 ├── data/
-│   └── daily.json                      # Machine-readable current POTD JSON
+│   ├── daily.json                      # Current LeetCode POTD data
+│   └── gfg.json                        # Current GeeksforGeeks POTD data
 ├── scripts/
-│   └── sync-daily-challenge.py         # Resilient Python sync script
-├── template.html                       # HTML template with live verification
-├── index.html                          # Deployed page (auto-built & live-verified)
+│   └── sync-daily-challenge.py         # Multi-platform sync script
+├── template.html                       # LeetCode template
+├── template-gfg.html                   # GeeksforGeeks template
+├── index.html                          # Deployed LeetCode redirect page
+├── gfg.html                            # Deployed GeeksforGeeks redirect page
+├── gfg/index.html                      # Clean URL support (/gfg)
 ├── .gitignore
 └── README.md
 ```
-
----
-
-## 🌐 Live URL
-
-👉 **[https://codesmith17.github.io/daily-leetcode-redirect/](https://codesmith17.github.io/daily-leetcode-redirect/)**
-
-Bookmark this link in your browser to immediately open today's LeetCode Daily Challenge!
-
----
-
-## 🛠️ GitHub Repository
-
-- **Repository**: [https://github.com/codesmith17/daily-leetcode-redirect](https://github.com/codesmith17/daily-leetcode-redirect)
-- **Live Pages**: [https://codesmith17.github.io/daily-leetcode-redirect/](https://codesmith17.github.io/daily-leetcode-redirect/)
-
-That's it! GitHub Actions will now automatically keep your repository synced, and your frontend will always verify against the user's browser time to guarantee the correct question opens.
-
