@@ -8,6 +8,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
   <link rel="icon" id="favicon" type="image/png" href="assets/icons/leetcode.png">
   <link rel="apple-touch-icon" id="apple-icon" href="assets/icons/leetcode.png">
   <style>
@@ -523,7 +524,7 @@
     </div>
 
     <div class="action-group">
-      <a href="#" class="btn-primary" id="btn-redirect">
+      <a href="#" class="btn-primary" id="btn-redirect" rel="noreferrer noopener" referrerpolicy="no-referrer">
         <span id="btn-cta-text">Open Challenge</span>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <line x1="7" y1="17" x2="17" y2="7"></line>
@@ -875,6 +876,40 @@
 
       loadPOTD();
 
+            // Referrer-free anonymous redirection
+      function executeNoReferrerRedirect(url) {
+        if (!url || url === "#") return;
+        try {
+          const u = new URL(url);
+          // Strip tracking/referral query parameters
+          const toDelete = [];
+          for (const key of u.searchParams.keys()) {
+            if (key.startsWith("utm_") || key === "ref" || key === "source" || key === "from") {
+              toDelete.push(key);
+            }
+          }
+          toDelete.forEach(k => u.searchParams.delete(k));
+          url = u.toString();
+        } catch (_) {}
+
+        try {
+          window.opener = null;
+        } catch (_) {}
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.rel = "noreferrer noopener";
+        link.referrerPolicy = "no-referrer";
+        link.target = "_self";
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+
+        setTimeout(function() {
+          window.location.replace(url);
+        }, 150);
+      }
+
       // Countdown redirect logic
       const DURATION = 2500;
       const startTime = performance.now();
@@ -893,7 +928,7 @@
         }
 
         if (remaining <= 0) {
-          window.location.replace(targetUrl);
+          executeNoReferrerRedirect(targetUrl);
         } else {
           requestAnimationFrame(tick);
         }
@@ -910,7 +945,14 @@
       }
 
       function resumeRedirect() {
-        window.location.replace(targetUrl);
+        executeNoReferrerRedirect(targetUrl);
+      }
+
+      if (redirectBtn) {
+        redirectBtn.addEventListener("click", function(e) {
+          e.preventDefault();
+          executeNoReferrerRedirect(targetUrl);
+        });
       }
 
       if (cancelBtn) {
@@ -921,7 +963,7 @@
       window.addEventListener("keydown", function(e) {
         if (e.code === "Space" || e.code === "Enter") {
           e.preventDefault();
-          window.location.replace(targetUrl);
+          executeNoReferrerRedirect(targetUrl);
         } else if (e.code === "KeyC" || e.code === "Escape") {
           cancelRedirect();
         } else if (e.code === "KeyR") {
