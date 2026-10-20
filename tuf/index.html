@@ -8,7 +8,8 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="robots" content="noindex">
-  <link rel="icon" id="favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+  <link rel="icon" id="favicon" type="image/png" href="../assets/icons/tuf.png">
+  <link rel="apple-touch-icon" id="apple-icon" href="../assets/icons/tuf.png">
   <style>
     /* Base Color Tokens */
     :root {
@@ -161,7 +162,14 @@
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
+    }
+    .nav-icon {
+      width: 14px;
+      height: 14px;
+      object-fit: contain;
+      border-radius: 2px;
+      flex-shrink: 0;
     }
     .nav-switch:hover {
       color: #fff;
@@ -437,9 +445,9 @@
         <span class="dot green"></span>
       </div>
       <div class="nav-switches">
-        <a href="../leetcode" class="nav-switch nav-lc" id="nav-lc-btn">⚡ LeetCode</a>
-        <a href="../gfg" class="nav-switch nav-gfg" id="nav-gfg-btn">🌿 GFG</a>
-        <a href="../tuf" class="nav-switch nav-tuf" id="nav-tuf-btn">🎯 TUF+</a>
+        <a href="../leetcode" class="nav-switch nav-lc" id="nav-lc-btn"><img id="nav-lc-img" class="nav-icon" src="../assets/icons/leetcode.png" alt="LeetCode"><span>LeetCode</span></a>
+        <a href="../gfg" class="nav-switch nav-gfg" id="nav-gfg-btn"><img id="nav-gfg-img" class="nav-icon" src="../assets/icons/gfg.png" alt="GFG"><span>GFG</span></a>
+        <a href="../tuf" class="nav-switch nav-tuf" id="nav-tuf-btn"><img id="nav-tuf-img" class="nav-icon" src="../assets/icons/tuf.png" alt="TUF+"><span>TUF+</span></a>
       </div>
     </div>
 
@@ -545,7 +553,7 @@
           resetHours: 0,
           resetMins: 0,
           resetLabel: "00:00 UTC (05:30 AM IST)",
-          emoji: "⚡",
+          icon: "leetcode.png",
           defaultPOTDUrl: "https://leetcode.com/problem-list/daily-question/",
           timeZone: "UTC"
         },
@@ -555,7 +563,7 @@
           resetHours: 18,
           resetMins: 30,
           resetLabel: "12:00 AM IST (18:30 UTC)",
-          emoji: "🌿",
+          icon: "gfg.png",
           defaultPOTDUrl: "https://www.geeksforgeeks.org/problem-of-the-day",
           timeZone: "Asia/Kolkata"
         },
@@ -565,7 +573,7 @@
           resetHours: 18,
           resetMins: 30,
           resetLabel: "12:00 AM IST (18:30 UTC)",
-          emoji: "🎯",
+          icon: "tuf.png",
           defaultPOTDUrl: "https://takeuforward.org/potd",
           timeZone: "Asia/Kolkata"
         }
@@ -583,18 +591,19 @@
         else if (path.includes("/leetcode")) platform = "leetcode";
         else {
           const attr = document.documentElement.getAttribute("data-platform");
-          platform = (attr && PLATFORMS[attr]) ? attr : "tuf";
+          platform = (attr && PLATFORMS[attr]) ? attr : "leetcode";
         }
       }
 
       document.documentElement.setAttribute("data-platform", platform);
-      const pConfig = PLATFORMS[platform] || PLATFORMS.tuf;
+      const pConfig = PLATFORMS[platform] || PLATFORMS.leetcode;
 
       // Dynamic subpath resolution
       const isSubdir = path.includes('/tuf') || path.includes('/leetcode') || path.includes('/gfg');
       const basePath = isSubdir ? "../data/" : "data/";
+      const iconBasePath = isSubdir ? "../assets/icons/" : "assets/icons/";
 
-      // Navigation switch links
+      // Navigation switch links & icons
       const navLcBtn = document.getElementById("nav-lc-btn");
       const navGfgBtn = document.getElementById("nav-gfg-btn");
       const navTufBtn = document.getElementById("nav-tuf-btn");
@@ -602,10 +611,22 @@
       if (navGfgBtn) navGfgBtn.href = isSubdir ? "../gfg" : "./gfg";
       if (navTufBtn) navTufBtn.href = isSubdir ? "../tuf" : "./tuf";
 
+      const navLcImg = document.getElementById("nav-lc-img");
+      const navGfgImg = document.getElementById("nav-gfg-img");
+      const navTufImg = document.getElementById("nav-tuf-img");
+      if (navLcImg) navLcImg.src = iconBasePath + "leetcode.png";
+      if (navGfgImg) navGfgImg.src = iconBasePath + "gfg.png";
+      if (navTufImg) navTufImg.src = iconBasePath + "tuf.png";
+
       // Favicon & initial texts
       const favicon = document.getElementById("favicon");
-      if (favicon && pConfig.emoji) {
-        favicon.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${pConfig.emoji}</text></svg>`;
+      if (favicon && pConfig.icon) {
+        favicon.type = "image/png";
+        favicon.href = iconBasePath + pConfig.icon;
+      }
+      const appleIcon = document.getElementById("apple-icon");
+      if (appleIcon && pConfig.icon) {
+        appleIcon.href = iconBasePath + pConfig.icon;
       }
       document.title = `${pConfig.name} POTD`;
 
