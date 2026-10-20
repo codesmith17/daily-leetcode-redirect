@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-platform="leetcode" data-difficulty="hard">
+<html lang="en" data-platform="leetcode" data-difficulty="medium">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sum of Sortable Integers — Daily POTD</title>
+  <title>LeetCode POTD</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -485,13 +485,12 @@
     </div>
 
     <div class="title-section">
-      <div class="problem-id">Problem 3886</div>
-      <h1 class="problem-title" id="problem-title">Sum of Sortable Integers</h1>
+      <div class="problem-id" id="problem-id">Daily Challenge</div>
+      <h1 class="problem-title" id="problem-title">Loading Challenge...</h1>
     </div>
 
-    <div class="pills">
-      <span class="pill pill-difficulty hard" id="pill-difficulty">Hard</span>
-      <span class="pill topic-tag" style="--tag-color:#60a5fa"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="8" y1="6" x2="8" y2="18"/><line x1="14" y1="6" x2="14" y2="18"/><line x1="20" y1="6" x2="20" y2="18"/></svg><span>Array</span></span><span class="pill topic-tag" style="--tag-color:#facc15"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="12" x2="20" y2="12"/><line x1="12" y1="4" x2="12" y2="20"/></svg><span>Math</span></span><span class="pill topic-tag" style="--tag-color:#a78bfa"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Sorting</span></span><span class="pill topic-tag" style="--tag-color:#94a3b8"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg><span>Enumeration</span></span>
+    <div class="pills" id="pills-container">
+      <span class="pill pill-difficulty medium" id="pill-difficulty">POTD</span>
     </div>
 
     <div class="status-panel">
@@ -511,12 +510,12 @@
       </div>
       <div class="status-row" style="font-size: 11px;">
         <span class="status-label">Local Date</span>
-        <span class="status-value" id="local-date">2026-10-20</span>
+        <span class="status-value" id="local-date">--</span>
       </div>
     </div>
 
     <div class="action-group">
-      <a href="https://leetcode.com/problems/sum-of-sortable-integers/" class="btn-primary" id="btn-redirect">
+      <a href="#" class="btn-primary" id="btn-redirect">
         <span id="btn-cta-text">Open Challenge</span>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <line x1="7" y1="17" x2="17" y2="7"></line>
@@ -529,7 +528,7 @@
     </div>
 
     <footer class="footer">
-      <span>Synced: 2026-10-20 05:20 UTC</span>
+      <span id="footer-synced">Synced Daily</span>
       <div class="kbd-hint">
         <kbd>Space</kbd> open &nbsp;•&nbsp; <kbd>C</kbd> pause
       </div>
@@ -538,19 +537,6 @@
 
   <script>
     (function() {
-      const BUNDLED_POTD = {
-        platform: "leetcode",
-        id: "3886",
-        title: "Sum of Sortable Integers",
-        slug: "sum-of-sortable-integers",
-        difficulty: "Hard",
-        difficultyClass: "hard",
-        url: "https://leetcode.com/problems/sum-of-sortable-integers/",
-        date: "2026-10-20",
-        tags: ["Array","Math","Sorting","Enumeration"],
-        syncedAt: "2026-10-20 05:20 UTC"
-      };
-
       // Platform Configuration Dictionary
       const PLATFORMS = {
         leetcode: {
@@ -585,9 +571,117 @@
         }
       };
 
-      const pConfig = PLATFORMS[BUNDLED_POTD.platform] || PLATFORMS.leetcode;
+      // Detect active platform from path or attribute or query parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryPlatform = urlParams.get("platform") || urlParams.get("p");
+      const path = window.location.pathname.toLowerCase();
 
-      // Check whether challenge date is expired based on platform reset timezone
+      let platform = queryPlatform;
+      if (!platform || !PLATFORMS[platform]) {
+        if (path.includes("/gfg")) platform = "gfg";
+        else if (path.includes("/tuf")) platform = "tuf";
+        else if (path.includes("/leetcode")) platform = "leetcode";
+        else {
+          const attr = document.documentElement.getAttribute("data-platform");
+          platform = (attr && PLATFORMS[attr]) ? attr : "leetcode";
+        }
+      }
+
+      document.documentElement.setAttribute("data-platform", platform);
+      const pConfig = PLATFORMS[platform] || PLATFORMS.leetcode;
+
+      // Dynamic subpath resolution
+      const isSubdir = path.includes('/tuf') || path.includes('/leetcode') || path.includes('/gfg');
+      const basePath = isSubdir ? "../data/" : "data/";
+
+      // Navigation switch links
+      const navLcBtn = document.getElementById("nav-lc-btn");
+      const navGfgBtn = document.getElementById("nav-gfg-btn");
+      const navTufBtn = document.getElementById("nav-tuf-btn");
+      if (navLcBtn) navLcBtn.href = isSubdir ? "../leetcode" : "./leetcode";
+      if (navGfgBtn) navGfgBtn.href = isSubdir ? "../gfg" : "./gfg";
+      if (navTufBtn) navTufBtn.href = isSubdir ? "../tuf" : "./tuf";
+
+      // Favicon & initial texts
+      const favicon = document.getElementById("favicon");
+      if (favicon && pConfig.emoji) {
+        favicon.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${pConfig.emoji}</text></svg>`;
+      }
+      document.title = `${pConfig.name} POTD`;
+
+      const titleEl = document.getElementById("problem-title");
+      const idEl = document.getElementById("problem-id");
+      const btnCta = document.getElementById("btn-cta-text");
+      const redirectLabel = document.getElementById("redirect-label");
+      const redirectBtn = document.getElementById("btn-redirect");
+      const cancelBtn = document.getElementById("btn-cancel");
+      const countdownEl = document.getElementById("countdown-text");
+      const progressBar = document.getElementById("progress-bar");
+      const localDateEl = document.getElementById("local-date");
+      const resetInEl = document.getElementById("reset-in-text");
+      const pillsContainer = document.getElementById("pills-container");
+      const diffPill = document.getElementById("pill-difficulty");
+      const footerSynced = document.getElementById("footer-synced");
+
+      if (btnCta) btnCta.textContent = pConfig.cta;
+      if (redirectLabel) redirectLabel.textContent = `Redirecting to ${pConfig.name}`;
+
+      let targetUrl = pConfig.defaultPOTDUrl;
+      let autoRedirectCancelled = false;
+
+      // Topic icon and color map
+      const topicRegistry = {
+        "dynamic programming": { color: "#c084fc", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/><path d="M15 21V9"/></svg>` },
+        "dp":                  { color: "#c084fc", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/><path d="M15 21V9"/></svg>` },
+        "stack":               { color: "#38bdf8", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>` },
+        "queue":               { color: "#2dd4bf", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/><circle cx="5" cy="12" r="2"/></svg>` },
+        "graph":               { color: "#f472b6", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="8" r="3"/><circle cx="12" cy="18" r="3"/><line x1="8.5" y1="7" x2="15.5" y2="7.5"/><line x1="7.5" y1="8.5" x2="10.5" y2="15.5"/><line x1="16.5" y1="10" x2="13.5" y2="16"/></svg>` },
+        "tree":                { color: "#4ade80", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><circle cx="6" cy="19" r="3"/><circle cx="18" cy="19" r="3"/><path d="M12 8v4"/><path d="M12 12l-4 4"/><path d="M12 12l4 4"/></svg>` },
+        "binary tree":         { color: "#4ade80", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><circle cx="6" cy="19" r="3"/><circle cx="18" cy="19" r="3"/><path d="M12 8v4"/><path d="M12 12l-4 4"/><path d="M12 12l4 4"/></svg>` },
+        "array":               { color: "#60a5fa", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="8" y1="6" x2="8" y2="18"/><line x1="14" y1="6" x2="14" y2="18"/><line x1="20" y1="6" x2="20" y2="18"/></svg>` },
+        "sorting":             { color: "#a78bfa", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>` },
+        "greedy":              { color: "#e879f9", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9l4-6z"/><path d="M2 9h20"/></svg>` },
+        "binary search":       { color: "#34d399", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>` },
+        "dfs":                 { color: "#38bdf8", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18"/><path d="M18 15l-6 6-6-6"/></svg>` },
+        "bfs":                 { color: "#38bdf8", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 0 0 0 18"/><path d="M12 7a5 5 0 0 0 0 10"/><path d="M12 11a1 1 0 0 0 0 2"/></svg>` },
+        "string":              { color: "#fbbf24", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>` },
+        "hash":                { color: "#fb7185", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>` },
+        "two pointers":        { color: "#818cf8", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M2 12H22"/><path d="M6 16L2 12L6 8"/></svg>` },
+        "math":                { color: "#facc15", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="12" x2="20" y2="12"/><line x1="12" y1="4" x2="12" y2="20"/></svg>` },
+        "bit manipulation":    { color: "#38bdf8", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="M7 6l-4 6 4 6"/><path d="M17 6l4 6-4 6"/></svg>` },
+        "dsa":                 { color: "#3b82f6", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>` },
+        "tuf":                 { color: "#327cf6", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>` }
+      };
+
+      function renderTopicTags(tags) {
+        if (!pillsContainer || !tags || !tags.length) return;
+        const currentDiffPill = document.getElementById("pill-difficulty");
+        pillsContainer.innerHTML = "";
+        if (currentDiffPill) pillsContainer.appendChild(currentDiffPill);
+
+        tags.slice(0, 4).forEach(tag => {
+          const tLower = tag.toLowerCase();
+          let style = { color: "#94a3b8", icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>` };
+          for (const [key, val] of Object.entries(topicRegistry)) {
+            if (tLower.includes(key)) {
+              style = val;
+              break;
+            }
+          }
+          const span = document.createElement("span");
+          span.className = "pill topic-tag";
+          span.style.setProperty("--tag-color", style.color);
+          span.innerHTML = `${style.icon}<span>${escapeText(tag)}</span>`;
+          pillsContainer.appendChild(span);
+        });
+      }
+
+      function escapeText(str) {
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
       function isChallengeExpired(challengeDate, timeZone) {
         if (!challengeDate || challengeDate.length < 10) return false;
         try {
@@ -603,53 +697,6 @@
           return challengeDate.slice(0, 10) < todayUtc;
         }
       }
-
-      const isBundledExpired = isChallengeExpired(BUNDLED_POTD.date, pConfig.timeZone);
-
-      // If bundled POTD is expired, immediately point target to live POTD portal so user is never redirected to yesterday's link
-      let targetUrl = isBundledExpired ? pConfig.defaultPOTDUrl : BUNDLED_POTD.url;
-
-      // Update dynamic DOM elements
-      const favicon = document.getElementById("favicon");
-      if (favicon && pConfig.emoji) {
-        favicon.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${pConfig.emoji}</text></svg>`;
-      }
-      
-      const titleEl = document.getElementById("problem-title");
-      const btnCta = document.getElementById("btn-cta-text");
-      const redirectLabel = document.getElementById("redirect-label");
-      const redirectBtn = document.getElementById("btn-redirect");
-
-      if (isBundledExpired) {
-        document.title = `Today's ${pConfig.name} POTD`;
-        if (titleEl) titleEl.textContent = `Today's Challenge (Refreshing...)`;
-        if (btnCta) btnCta.textContent = "Open Live POTD";
-        if (redirectLabel) redirectLabel.textContent = `Opening Live ${pConfig.name} POTD`;
-        if (redirectBtn) redirectBtn.href = pConfig.defaultPOTDUrl;
-      } else {
-        document.title = `${BUNDLED_POTD.title} — ${pConfig.name} POTD`;
-        if (btnCta) btnCta.textContent = pConfig.cta;
-        if (redirectLabel) redirectLabel.textContent = `Redirecting to ${pConfig.name}`;
-      }
-
-      // Dynamic subpath resolution
-      const isSubdir = window.location.pathname.includes('/tuf') || window.location.pathname.includes('/leetcode') || window.location.pathname.includes('/gfg');
-      const basePath = isSubdir ? "../data/" : "data/";
-
-      const navLcBtn = document.getElementById("nav-lc-btn");
-      const navGfgBtn = document.getElementById("nav-gfg-btn");
-      const navTufBtn = document.getElementById("nav-tuf-btn");
-
-      if (navLcBtn) navLcBtn.href = isSubdir ? "../leetcode" : "./leetcode";
-      if (navGfgBtn) navGfgBtn.href = isSubdir ? "../gfg" : "./gfg";
-      if (navTufBtn) navTufBtn.href = isSubdir ? "../tuf" : "./tuf";
-
-      let autoRedirectCancelled = false;
-      const cancelBtn = document.getElementById("btn-cancel");
-      const countdownEl = document.getElementById("countdown-text");
-      const progressBar = document.getElementById("progress-bar");
-      const localDateEl = document.getElementById("local-date");
-      const resetInEl = document.getElementById("reset-in-text");
 
       // Compute local date
       const now = new Date();
@@ -681,11 +728,21 @@
         targetUrl = data.url;
         if (redirectBtn) redirectBtn.href = data.url;
         if (titleEl && data.title) titleEl.textContent = data.title;
-        const diffPill = document.getElementById("pill-difficulty");
+        if (idEl) {
+          if (data.id) {
+            idEl.textContent = data.id.startsWith("#") ? "Problem " + data.id : "Problem #" + data.id;
+          } else {
+            idEl.textContent = "Daily Challenge";
+          }
+        }
         if (diffPill && data.difficulty) {
           diffPill.textContent = data.difficulty;
-          diffPill.className = "pill pill-difficulty " + (data.difficultyClass || data.difficulty.toLowerCase());
+          const diffCls = (data.difficultyClass || data.difficulty).toLowerCase();
+          diffPill.className = "pill pill-difficulty " + diffCls;
+          document.documentElement.setAttribute("data-difficulty", diffCls);
         }
+        if (data.tags) renderTopicTags(data.tags);
+        if (footerSynced && data.syncedAt) footerSynced.textContent = "Synced: " + data.syncedAt;
         if (redirectLabel) redirectLabel.textContent = `Redirecting to ${pConfig.name}`;
         if (btnCta) btnCta.textContent = pConfig.cta;
         document.title = `${data.title} — ${pConfig.name} POTD`;
@@ -697,7 +754,7 @@
         const timeoutId = setTimeout(() => controller.abort(), 1800);
 
         try {
-          if (BUNDLED_POTD.platform === "gfg") {
+          if (platform === "gfg") {
             const resp = await fetch("https://practiceapi.geeksforgeeks.org/api/vr/problems-of-day/problem/today/", {
               signal: controller.signal
             });
@@ -710,12 +767,13 @@
                   url: json.problem_url,
                   difficulty: json.difficulty || "Medium",
                   difficultyClass: (json.difficulty || "medium").toLowerCase(),
-                  id: json.id ? String(json.id) : ""
+                  id: json.id ? String(json.id) : "",
+                  tags: (json.tags && json.tags.topic_tags) ? json.tags.topic_tags : []
                 });
                 return;
               }
             }
-          } else if (BUNDLED_POTD.platform === "tuf") {
+          } else if (platform === "tuf") {
             const resp = await fetch("https://backend-go.takeuforward.org/api/v1/potd/today?track=dsa", {
               signal: controller.signal
             });
@@ -729,12 +787,13 @@
                   url: "https://takeuforward.org/practice/dsa/" + track.problem.slug,
                   difficulty: track.problem.difficulty || "Core",
                   difficultyClass: "medium",
-                  id: "#" + track.problem.problem_id
+                  id: "#" + track.problem.problem_id,
+                  tags: ["DSA", "TUF+ POTD"]
                 });
                 return;
               }
             }
-          } else if (BUNDLED_POTD.platform === "leetcode") {
+          } else if (platform === "leetcode") {
             const resp = await fetch("https://leetcode.com/graphql", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -761,34 +820,39 @@
           }
         } catch (e) {
           clearTimeout(timeoutId);
-          // If direct fetch fails (e.g. CORS), targetUrl safely remains pConfig.defaultPOTDUrl
         }
       }
 
-      // Verify bundled challenge against live data/<platform>.json with cache-busting
-      async function verifyLivePOTD() {
+      async function loadPOTD() {
+        let isExpired = false;
         try {
-          const resp = await fetch(basePath + BUNDLED_POTD.platform + ".json?t=" + Date.now(), { cache: "no-store" });
+          const resp = await fetch(basePath + platform + ".json?t=" + Date.now(), { cache: "no-store" });
           if (resp.ok) {
             const data = await resp.json();
             if (data && data.url) {
-              const dataExpired = isChallengeExpired(data.date, pConfig.timeZone);
-              if (!dataExpired) {
+              isExpired = isChallengeExpired(data.date, pConfig.timeZone);
+              if (!isExpired) {
                 applyPOTDData(data);
                 return;
               }
             }
           }
         } catch (e) {
-          console.warn("Could not fetch live " + BUNDLED_POTD.platform + ".json", e);
+          console.warn("Could not fetch " + platform + ".json", e);
         }
 
-        // If stored data is expired, try calling the direct API
-        if (isBundledExpired) {
-          await tryDirectAPIFetch();
-        }
+        // If JSON is expired or failed to load, set safe live portal fallback and try direct API
+        targetUrl = pConfig.defaultPOTDUrl;
+        if (redirectBtn) redirectBtn.href = pConfig.defaultPOTDUrl;
+        if (titleEl) titleEl.textContent = `Today's Challenge (Refreshing...)`;
+        if (btnCta) btnCta.textContent = "Open Live POTD";
+        if (redirectLabel) redirectLabel.textContent = `Opening Live ${pConfig.name} POTD`;
+        document.title = `Today's ${pConfig.name} POTD`;
+
+        await tryDirectAPIFetch();
       }
-      verifyLivePOTD();
+
+      loadPOTD();
 
       // Countdown redirect logic
       const DURATION = 2500;
