@@ -1,16 +1,17 @@
 {
   "platform": "leetcode",
-  "id": "2089",
-  "title": "Find Target Indices After Sorting Array",
-  "slug": "find-target-indices-after-sorting-array",
-  "difficulty": "Easy",
-  "difficultyClass": "easy",
-  "url": "https://leetcode.com/problems/find-target-indices-after-sorting-array/",
-  "date": "2026-10-19",
+  "id": "3886",
+  "title": "Sum of Sortable Integers",
+  "slug": "sum-of-sortable-integers",
+  "difficulty": "Hard",
+  "difficultyClass": "hard",
+  "url": "https://leetcode.com/problems/sum-of-sortable-integers/",
+  "date": "2026-10-20",
   "tags": [
     "Array",
-    "Binary Search",
-    "Sorting"
+    "Math",
+    "Sorting",
+    "Enumeration"
   ],
-  "syncedAt": "2026-10-19 22:59 UTC"
+  "syncedAt": "2026-10-20 01:56 UTC"
 }
