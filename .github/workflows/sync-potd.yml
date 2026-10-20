@@ -54,7 +54,8 @@ jobs:
           if git diff --cached --quiet; then
             echo "Already up to date, nothing to commit."
           else
-            git commit -m "chore: sync daily POTD challenges ($(date -u +%F))"
+            git commit --author="codesmith17 <kanchanlatakrishna@gmail.com>" \
+                       -m "chore: sync daily POTD challenges ($(date -u +%F))"
             git pull --rebase origin main
             git push origin main
           fi
