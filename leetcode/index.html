@@ -745,6 +745,30 @@
       updateResetCountdown();
       setInterval(updateResetCountdown, 30000);
 
+      // Format synced UTC timestamp into user's local browser time
+      function formatLocalSyncedTime(syncedAt) {
+        if (!syncedAt) return "Synced Daily";
+        try {
+          let d;
+          if (syncedAt.includes("UTC")) {
+            const parts = syncedAt.trim().split(" ");
+            d = new Date(`${parts[0]}T${parts[1]}:00Z`);
+          } else {
+            d = new Date(syncedAt);
+          }
+          if (isNaN(d.getTime())) return "Synced: " + syncedAt;
+          return "Synced: " + new Intl.DateTimeFormat(undefined, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+          }).format(d);
+        } catch (_) {
+          return "Synced: " + syncedAt;
+        }
+      }
+
       function applyPOTDData(data) {
         if (!data || !data.url) return;
         targetUrl = data.url;
@@ -764,7 +788,10 @@
           document.documentElement.setAttribute("data-difficulty", diffCls);
         }
         if (data.tags) renderTopicTags(data.tags);
-        if (footerSynced && data.syncedAt) footerSynced.textContent = "Synced: " + data.syncedAt;
+        if (footerSynced && data.syncedAt) {
+          footerSynced.textContent = formatLocalSyncedTime(data.syncedAt);
+          footerSynced.title = "Synced UTC: " + data.syncedAt;
+        }
         if (redirectLabel) redirectLabel.textContent = `Redirecting to ${pConfig.name}`;
         if (btnCta) btnCta.textContent = pConfig.cta;
         document.title = `${data.title} — ${pConfig.name} POTD`;
