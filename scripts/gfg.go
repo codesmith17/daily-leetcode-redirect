@@ -102,7 +102,7 @@ func syncGFG(client *http.Client, rootDir, syncedAt string) (*POTDData, error) {
 	}
 	fmt.Println("[GFG] OK - Fetched directly from GeeksforGeeks Practice API.")
 
-	if err := renderPage(data, "gfg", rootDir, syncedAt, false); err != nil {
+	if err := saveJSONData(data, "gfg", rootDir, syncedAt); err != nil {
 		return nil, fmt.Errorf("render GFG: %w", err)
 	}
 

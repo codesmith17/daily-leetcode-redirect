@@ -66,7 +66,6 @@ daily-potd-redirect/
 │   ├── leetcode.json                   # Standardized LeetCode POTD JSON
 │   ├── gfg.json                        # Standardized GeeksforGeeks POTD JSON
 │   ├── tuf.json                        # Standardized takeUforward POTD JSON
-│   └── daily.json                      # Backward-compatible alias
 ├── templates/
 │   └── potd.html                       # Unified dynamic terminal template with auto-theme switching
 ├── leetcode/

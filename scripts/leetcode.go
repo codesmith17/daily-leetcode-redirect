@@ -177,7 +177,7 @@ func syncLeetCode(client *http.Client, rootDir, syncedAt string) (*POTDData, err
 		fmt.Println("[LeetCode] OK - Fetched directly from LeetCode GraphQL.")
 	}
 
-	if err := renderPage(data, "leetcode", rootDir, syncedAt, true); err != nil {
+	if err := saveJSONData(data, "leetcode", rootDir, syncedAt); err != nil {
 		return nil, fmt.Errorf("render LeetCode: %w", err)
 	}
 

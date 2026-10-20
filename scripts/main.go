@@ -33,9 +33,9 @@ func newHTTPClient() *http.Client {
 	}
 }
 
-// renderPage persists the synced POTD data to JSON files in the data/ directory.
+// saveJSONData persists the synced POTD data to JSON files in the data/ directory.
 // The frontend dynamically reads data from these JSON files, keeping HTML files clean and static.
-func renderPage(data *POTDData, platform, rootDir, syncedAt string, alsoWriteRoot bool) error {
+func saveJSONData(data *POTDData, platform, rootDir, syncedAt string) error {
 	data.SyncedAt = syncedAt
 
 	dataDir := filepath.Join(rootDir, "data")
@@ -51,13 +51,6 @@ func renderPage(data *POTDData, platform, rootDir, syncedAt string, alsoWriteRoo
 	platformPath := filepath.Join(dataDir, fmt.Sprintf("%s.json", platform))
 	if err := os.WriteFile(platformPath, jsonData, 0644); err != nil {
 		return fmt.Errorf("write %s: %w", platformPath, err)
-	}
-
-	if alsoWriteRoot {
-		dailyPath := filepath.Join(dataDir, "daily.json")
-		if err := os.WriteFile(dailyPath, jsonData, 0644); err != nil {
-			return fmt.Errorf("write %s: %w", dailyPath, err)
-		}
 	}
 
 	return nil

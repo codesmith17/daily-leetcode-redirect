@@ -192,7 +192,7 @@ func syncTUF(client *http.Client, rootDir, syncedAt string) (*POTDData, error) {
 		fmt.Println("[TUF] OK - Fetched directly from takeuforward.org backend API.")
 	}
 
-	if err := renderPage(data, "tuf", rootDir, syncedAt, false); err != nil {
+	if err := saveJSONData(data, "tuf", rootDir, syncedAt); err != nil {
 		return nil, fmt.Errorf("render TUF: %w", err)
 	}
 
