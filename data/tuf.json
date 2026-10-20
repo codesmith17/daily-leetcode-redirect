@@ -1,15 +1,16 @@
 {
   "platform": "tuf",
-  "id": "#131",
-  "title": "Maximum Depth in BT",
-  "slug": "maximum-depth-in-bt",
-  "difficulty": "Core",
-  "difficultyClass": "medium",
-  "url": "https://takeuforward.org/practice/dsa/maximum-depth-in-bt",
-  "date": "2026-10-20",
+  "id": "#858",
+  "title": "Range Sum in BST",
+  "slug": "range-sum-in-bst",
+  "difficulty": "Basic",
+  "difficultyClass": "easy",
+  "url": "https://takeuforward.org/practice/dsa/range-sum-in-bst",
+  "date": "2026-10-21",
   "tags": [
     "DSA",
+    "Bst",
     "TUF+ POTD"
   ],
-  "syncedAt": "2026-10-20 13:41 UTC"
+  "syncedAt": "2026-10-20 18:32 UTC"
 }

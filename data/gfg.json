@@ -1,15 +1,15 @@
 {
   "platform": "gfg",
-  "id": "2211",
-  "title": "Largest with Same Parity Adjacent Swaps",
+  "id": "2212",
+  "title": "Minimum Sum Subarray",
   "slug": "1",
   "difficulty": "Medium",
   "difficultyClass": "medium",
-  "url": "https://www.geeksforgeeks.org/problems/even-swap/1",
-  "date": "2026-10-20",
+  "url": "https://www.geeksforgeeks.org/problems/smallest-sum-contiguous-subarray/1",
+  "date": "2026-10-21",
   "tags": [
     "Arrays",
-    "Sorting"
+    "Dynamic Programming"
   ],
-  "syncedAt": "2026-10-20 13:41 UTC"
+  "syncedAt": "2026-10-20 18:32 UTC"
 }
