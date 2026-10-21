@@ -1,16 +1,15 @@
 {
   "platform": "tuf",
-  "id": "#858",
-  "title": "Range Sum in BST",
-  "slug": "range-sum-in-bst",
-  "difficulty": "Basic",
-  "difficultyClass": "easy",
-  "url": "https://takeuforward.org/practice/dsa/range-sum-in-bst",
-  "date": "2026-10-21",
+  "id": "#268",
+  "title": "Design Snake Game",
+  "slug": "design-snake-game",
+  "difficulty": "Core",
+  "difficultyClass": "medium",
+  "url": "https://takeuforward.org/practice/dsa/design-snake-game",
+  "date": "2026-10-22",
   "tags": [
     "DSA",
-    "Bst",
     "TUF+ POTD"
   ],
-  "syncedAt": "2026-10-21 13:57 UTC"
+  "syncedAt": "2026-10-21 18:46 UTC"
 }

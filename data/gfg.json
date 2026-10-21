@@ -1,15 +1,14 @@
 {
   "platform": "gfg",
-  "id": "2212",
-  "title": "Minimum Sum Subarray",
+  "id": "2223",
+  "title": "Palindrome with Replacement",
   "slug": "1",
   "difficulty": "Medium",
   "difficultyClass": "medium",
-  "url": "https://www.geeksforgeeks.org/problems/smallest-sum-contiguous-subarray/1",
-  "date": "2026-10-21",
+  "url": "https://www.geeksforgeeks.org/problems/palindrome-with-minimum-sum--170648/1",
+  "date": "2026-10-22",
   "tags": [
-    "Arrays",
-    "Dynamic Programming"
+    "Strings"
   ],
-  "syncedAt": "2026-10-21 13:57 UTC"
+  "syncedAt": "2026-10-21 18:46 UTC"
 }
