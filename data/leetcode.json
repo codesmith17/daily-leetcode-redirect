@@ -1,17 +1,14 @@
 {
   "platform": "leetcode",
-  "id": "3886",
-  "title": "Sum of Sortable Integers",
-  "slug": "sum-of-sortable-integers",
-  "difficulty": "Hard",
-  "difficultyClass": "hard",
-  "url": "https://leetcode.com/problems/sum-of-sortable-integers/",
-  "date": "2026-10-20",
+  "id": "3863",
+  "title": "Minimum Operations to Sort a String",
+  "slug": "minimum-operations-to-sort-a-string",
+  "difficulty": "Medium",
+  "difficultyClass": "medium",
+  "url": "https://leetcode.com/problems/minimum-operations-to-sort-a-string/",
+  "date": "2026-10-21",
   "tags": [
-    "Array",
-    "Math",
-    "Sorting",
-    "Enumeration"
+    "String"
   ],
-  "syncedAt": "2026-10-20 22:25 UTC"
+  "syncedAt": "2026-10-21 01:43 UTC"
 }
