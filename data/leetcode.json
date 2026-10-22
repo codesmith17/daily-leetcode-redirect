@@ -1,14 +1,14 @@
 {
   "platform": "leetcode",
-  "id": "3863",
-  "title": "Minimum Operations to Sort a String",
-  "slug": "minimum-operations-to-sort-a-string",
+  "id": "3942",
+  "title": "Minimum Operations to Sort a Permutation",
+  "slug": "minimum-operations-to-sort-a-permutation",
   "difficulty": "Medium",
   "difficultyClass": "medium",
-  "url": "https://leetcode.com/problems/minimum-operations-to-sort-a-string/",
-  "date": "2026-10-21",
+  "url": "https://leetcode.com/problems/minimum-operations-to-sort-a-permutation/",
+  "date": "2026-10-22",
   "tags": [
-    "String"
+    "Array"
   ],
-  "syncedAt": "2026-10-21 22:29 UTC"
+  "syncedAt": "2026-10-22 01:38 UTC"
 }
