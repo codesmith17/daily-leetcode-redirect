@@ -1,14 +1,16 @@
 {
   "platform": "gfg",
-  "id": "2223",
-  "title": "Palindrome with Replacement",
+  "id": "2214",
+  "title": "Count Pairs Violating  BST Property",
   "slug": "1",
   "difficulty": "Medium",
   "difficultyClass": "medium",
-  "url": "https://www.geeksforgeeks.org/problems/palindrome-with-minimum-sum--170648/1",
-  "date": "2026-10-22",
+  "url": "https://www.geeksforgeeks.org/problems/pairs-violating-bst-property--212515/1",
+  "date": "2026-10-23",
   "tags": [
-    "Strings"
+    "Binary Search Tree",
+    "Merge Sort",
+    "Traversal"
   ],
-  "syncedAt": "2026-10-22 13:55 UTC"
+  "syncedAt": "2026-10-22 18:39 UTC"
 }

@@ -1,15 +1,17 @@
 {
   "platform": "tuf",
-  "id": "#268",
-  "title": "Design Snake Game",
-  "slug": "design-snake-game",
+  "id": "#571",
+  "title": "Check if an array represents a min heap ",
+  "slug": "check-if-an-array-represents-a-min-heap-",
   "difficulty": "Core",
   "difficultyClass": "medium",
-  "url": "https://takeuforward.org/practice/dsa/design-snake-game",
-  "date": "2026-10-22",
+  "url": "https://takeuforward.org/practice/dsa/check-if-an-array-represents-a-min-heap-",
+  "date": "2026-10-23",
   "tags": [
     "DSA",
+    "Array",
+    "Heap",
     "TUF+ POTD"
   ],
-  "syncedAt": "2026-10-22 13:55 UTC"
+  "syncedAt": "2026-10-22 18:39 UTC"
 }
