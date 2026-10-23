@@ -1,17 +1,15 @@
 {
   "platform": "tuf",
-  "id": "#571",
-  "title": "Check if an array represents a min heap ",
-  "slug": "check-if-an-array-represents-a-min-heap-",
-  "difficulty": "Core",
-  "difficultyClass": "medium",
-  "url": "https://takeuforward.org/practice/dsa/check-if-an-array-represents-a-min-heap-",
-  "date": "2026-10-23",
+  "id": "#364",
+  "title": "Check for Perfect Number",
+  "slug": "check-for-perfect-number",
+  "difficulty": "Basic",
+  "difficultyClass": "easy",
+  "url": "https://takeuforward.org/practice/dsa/check-for-perfect-number",
+  "date": "2026-10-24",
   "tags": [
     "DSA",
-    "Array",
-    "Heap",
     "TUF+ POTD"
   ],
-  "syncedAt": "2026-10-23 13:36 UTC"
+  "syncedAt": "2026-10-23 18:30 UTC"
 }

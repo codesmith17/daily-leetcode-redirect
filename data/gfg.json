@@ -1,16 +1,14 @@
 {
   "platform": "gfg",
-  "id": "2214",
-  "title": "Count Pairs Violating  BST Property",
+  "id": "2215",
+  "title": "Trace Path",
   "slug": "1",
-  "difficulty": "Medium",
-  "difficultyClass": "medium",
-  "url": "https://www.geeksforgeeks.org/problems/pairs-violating-bst-property--212515/1",
-  "date": "2026-10-23",
+  "difficulty": "Easy",
+  "difficultyClass": "easy",
+  "url": "https://www.geeksforgeeks.org/problems/trace-path3840/1",
+  "date": "2026-10-24",
   "tags": [
-    "Binary Search Tree",
-    "Merge Sort",
-    "Traversal"
+    "Matrix"
   ],
-  "syncedAt": "2026-10-23 13:36 UTC"
+  "syncedAt": "2026-10-23 18:30 UTC"
 }
